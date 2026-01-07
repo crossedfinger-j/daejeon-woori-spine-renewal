@@ -1,26 +1,404 @@
 @import "tailwindcss";
 
+/* ============================================
+   대전우리병원 리뉴얼 - Silver-Friendly 디자인 시스템
+   Professional & Accessible Medical Design
+   3070 세대를 위한 고대비, 넓은 여백 설계
+   ============================================ */
+
+/* Pretendard 폰트 */
+@font-face {
+  font-family: 'Pretendard';
+  src: url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
 :root {
+  /* Primary Colors - Deep Navy 기반 고대비 컬러 */
+  --primary-50: #F0F4F8;
+  --primary-100: #D9E2EC;
+  --primary-200: #BCCCDC;
+  --primary-300: #9FB3C8;
+  --primary-400: #829AB1;
+  --primary-500: #1E3A5F;
+  --primary-600: #163152;
+  --primary-700: #102A43;
+  --primary-800: #0D2137;
+  --primary-900: #091A2B;
+
+  /* Accent - 포인트 컬러 */
+  --accent-500: #3B82F6;
+  --accent-600: #2563EB;
+
+  /* Semantic Colors - 고대비 */
+  --success-50: #F0FDF4;
+  --success-100: #DCFCE7;
+  --success-500: #22C55E;
+  --success-600: #16A34A;
+
+  --warning-50: #FFFBEB;
+  --warning-100: #FEF3C7;
+  --warning-500: #F59E0B;
+  --warning-600: #D97706;
+
+  --error-50: #FEF2F2;
+  --error-400: #F87171;
+  --error-500: #EF4444;
+  --error-600: #DC2626;
+
+  --info-50: #EFF6FF;
+  --info-500: #3B82F6;
+  --info-600: #2563EB;
+
+  /* Slate Colors - 부드러운 그레이 */
+  --slate-50: #F8FAFC;
+  --slate-100: #F1F5F9;
+  --slate-200: #E2E8F0;
+  --slate-300: #CBD5E1;
+  --slate-400: #94A3B8;
+  --slate-500: #64748B;
+  --slate-600: #475569;
+  --slate-700: #334155;
+  --slate-800: #1E293B;
+  --slate-900: #0F172A;
+
+  /* Neutral Colors */
+  --gray-50: #F8FAFC;
+  --gray-100: #F1F5F9;
+  --gray-200: #E2E8F0;
+  --gray-300: #CBD5E1;
+  --gray-400: #94A3B8;
+  --gray-500: #64748B;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1E293B;
+  --gray-900: #0F172A;
+
+  /* Center Theme Colors */
+  --center-spine: #1E3A5F;
+  --center-joint: #2D5A4A;
+  --center-pain: #5C4033;
+  --center-rehab: #4A3B5C;
+  --center-checkup: #2A4A5A;
+
+  /* ============================================
+     여백 시스템 (Generous Spacing System)
+     Silver-Friendly: 넓은 여백으로 시각적 여유
+     ============================================ */
+
+  /* 섹션 간격 - 대폭 확대 */
+  --section-py: 8rem;           /* 128px - py-32 */
+  --section-py-lg: 10rem;       /* 160px - py-40 */
+  --section-header-mb: 4rem;    /* 64px - 섹션 헤더 하단 마진 */
+
+  /* 카드 내부 여백 - 최소 p-8 이상 보장 */
+  --card-padding: 2rem;         /* 32px - p-8 */
+  --card-padding-lg: 2.5rem;    /* 40px - p-10 */
+  --card-gap: 2rem;             /* 32px - 카드 간 간격 */
+
+  /* 버튼 여백 - 터치 타겟 최적화 */
+  --btn-height: 3.5rem;         /* 56px - h-14 */
+  --btn-height-lg: 4rem;        /* 64px - h-16 */
+  --btn-px: 2rem;               /* 32px - px-8 */
+  --btn-px-lg: 2.5rem;          /* 40px - px-10 */
+
+  /* Component Tokens - 입체감 있는 그림자 */
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --card-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --card-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --card-border: 1px solid var(--slate-100);
+
+  /* Background */
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1E293B;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  /* Primary */
+  --color-primary-50: var(--primary-50);
+  --color-primary-100: var(--primary-100);
+  --color-primary-200: var(--primary-200);
+  --color-primary-300: var(--primary-300);
+  --color-primary-400: var(--primary-400);
+  --color-primary-500: var(--primary-500);
+  --color-primary-600: var(--primary-600);
+  --color-primary-700: var(--primary-700);
+  --color-primary-800: var(--primary-800);
+  --color-primary-900: var(--primary-900);
+
+  /* Gray / Slate */
+  --color-gray-50: var(--gray-50);
+  --color-gray-100: var(--gray-100);
+  --color-gray-200: var(--gray-200);
+  --color-gray-300: var(--gray-300);
+  --color-gray-400: var(--gray-400);
+  --color-gray-500: var(--gray-500);
+  --color-gray-600: var(--gray-600);
+  --color-gray-700: var(--gray-700);
+  --color-gray-800: var(--gray-800);
+  --color-gray-900: var(--gray-900);
+
+  --color-slate-50: var(--slate-50);
+  --color-slate-100: var(--slate-100);
+  --color-slate-200: var(--slate-200);
+  --color-slate-300: var(--slate-300);
+
+  /* Semantic */
+  --color-success-50: var(--success-50);
+  --color-success-500: var(--success-500);
+  --color-success-600: var(--success-600);
+
+  --color-warning-50: var(--warning-50);
+  --color-warning-500: var(--warning-500);
+  --color-warning-600: var(--warning-600);
+
+  --color-error-50: var(--error-50);
+  --color-error-400: var(--error-400);
+  --color-error-500: var(--error-500);
+  --color-error-600: var(--error-600);
+
+  --color-info-50: var(--info-50);
+  --color-info-500: var(--info-500);
+  --color-info-600: var(--info-600);
+
+  /* Centers */
+  --color-center-spine: var(--center-spine);
+  --color-center-joint: var(--center-joint);
+  --color-center-pain: var(--center-pain);
+  --color-center-rehab: var(--center-rehab);
+  --color-center-checkup: var(--center-checkup);
+
+  /* Font */
+  --font-sans: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Base Styles */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+@media (max-width: 640px) {
+  html {
+    font-size: 15px;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Container centering fix for Tailwind v4 */
+.mx-auto {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+.max-w-7xl {
+  max-width: 80rem !important; /* 1280px */
+  width: 100%;
+}
+
+.max-w-6xl {
+  max-width: 72rem !important; /* 1152px */
+  width: 100%;
+}
+
+.max-w-5xl {
+  max-width: 64rem !important; /* 1024px */
+  width: 100%;
+}
+
+/* ============================================
+   Typography - Silver-Friendly 가독성
+   최소 text-lg(1.125rem) 이상 본문 텍스트
+   ============================================ */
+
+h1 {
+  font-size: 3rem;        /* 48px - text-5xl */
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  color: var(--gray-900);
+}
+
+h2 {
+  font-size: 2.25rem;     /* 36px - text-4xl */
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--gray-900);
+}
+
+h3 {
+  font-size: 1.5rem;      /* 24px - text-2xl */
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--gray-900);
+}
+
+h4 {
+  font-size: 1.25rem;     /* 20px - text-xl */
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--gray-800);
+}
+
+/* 본문 기본 크기를 text-lg로 상향 */
+p {
+  font-size: 1.125rem;    /* 18px - text-lg */
+  line-height: 1.9;
+  color: var(--gray-600);
+}
+
+/* Text size utilities */
+.text-xs { font-size: 0.8125rem !important; }   /* 13px */
+.text-sm { font-size: 0.9375rem !important; }   /* 15px */
+.text-base { font-size: 1.0625rem !important; } /* 17px */
+.text-lg { font-size: 1.125rem !important; }    /* 18px */
+.text-xl { font-size: 1.25rem !important; }     /* 20px */
+.text-2xl { font-size: 1.5rem !important; }     /* 24px */
+.text-3xl { font-size: 1.875rem !important; }   /* 30px */
+.text-4xl { font-size: 2.25rem !important; }    /* 36px */
+.text-5xl { font-size: 3rem !important; }       /* 48px */
+
+/* Focus visible for accessibility */
+:focus-visible {
+  outline: 3px solid var(--primary-500);
+  outline-offset: 3px;
+}
+
+/* Touch-friendly tap highlight */
+@media (hover: none) {
+  button, a {
+    -webkit-tap-highlight-color: rgba(30, 58, 95, 0.15);
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--slate-100);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--slate-300);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--slate-400);
+}
+
+/* Animation utilities */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out;
+}
+
+.animate-slide-down {
+  animation: slideDown 0.5s ease-out;
+}
+
+/* ============================================
+   Card Styles - 현대적 입체감
+   흰색 배경 + slate 보더 + lg 그림자
+   ============================================ */
+
+.card-modern {
+  background: white;
+  border-radius: 1.25rem;         /* rounded-2xl+ */
+  border: 1px solid var(--slate-100);
+  box-shadow: var(--card-shadow-lg);
+  transition: all 0.3s ease;
+}
+
+.card-modern:hover {
+  box-shadow: var(--card-shadow-xl);
+  transform: translateY(-4px);
+}
+
+/* Touch target - Silver-Friendly 최소 56px */
+.touch-target {
+  min-width: 56px;
+  min-height: 56px;
+}
+
+/* Safe area */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* ============================================
+   Utility Classes
+   ============================================ */
+
+/* 시각적 구분선 */
+.divider {
+  height: 1px;
+  background: var(--slate-200);
+  margin: 2rem 0;
+}
+
+/* 아이콘과 텍스트 간격 */
+.icon-text-gap {
+  gap: 1rem; /* space-x-4 */
+}
+
+/* leading-relaxed 강화 */
+.leading-relaxed {
+  line-height: 1.75 !important;
+}
+
+.leading-loose {
+  line-height: 2 !important;
 }
