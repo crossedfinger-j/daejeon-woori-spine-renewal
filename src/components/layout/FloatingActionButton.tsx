@@ -35,13 +35,14 @@ export function FloatingActionButton() {
 
       {/* Expanded Menu */}
       {isExpanded && (
-        <div className="flex flex-col gap-4 animate-slide-up">
+        <div className="flex flex-col animate-slide-up" style={{ gap: '16px' }}>
           {/* 카카오톡 상담 */}
           <a
             href="https://pf.kakao.com/_xnxnxnxn"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-3 bg-[#FEE500] text-[#3C1E1E] px-6 py-4 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+            style={{ padding: '12px 20px', gap: '10px' }}
+            className="flex items-center bg-[#FEE500] text-[#3C1E1E] rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
           >
             <div className="w-12 h-12 bg-[#3C1E1E] rounded-full flex items-center justify-center">
               <MessageCircle className="w-6 h-6 text-[#FEE500]" />
@@ -55,7 +56,8 @@ export function FloatingActionButton() {
           {/* 전화 연결 */}
           <a
             href="tel:1577-0052"
-            className="flex items-center gap-3 bg-[var(--primary-500)] text-white px-6 py-4 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
+            style={{ padding: '12px 20px', gap: '10px' }}
+            className="flex items-center bg-[var(--primary-500)] text-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105"
           >
             <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
               <Phone className="w-6 h-6" />

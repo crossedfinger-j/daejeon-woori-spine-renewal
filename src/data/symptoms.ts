@@ -1,11 +1,11 @@
 import { BodyPartInfo, Symptom } from "@/types";
 
 export const bodyParts: BodyPartInfo[] = [
-  { id: "neck", name: "neck", nameKo: "목/경추", icon: "🦒" },
+  { id: "neck", name: "neck", nameKo: "목/경추", icon: "🙆" },
   { id: "back", name: "back", nameKo: "허리/요추", icon: "🔙" },
   { id: "shoulder", name: "shoulder", nameKo: "어깨", icon: "💪" },
   { id: "knee", name: "knee", nameKo: "무릎", icon: "🦵" },
-  { id: "hand", name: "hand", nameKo: "손/손목", icon: "🤚" },
+  { id: "hand", name: "hand", nameKo: "손/손목", icon: "✋" },
   { id: "foot", name: "foot", nameKo: "발/발목", icon: "🦶" },
   { id: "hip", name: "hip", nameKo: "고관절", icon: "🦴" },
 ];

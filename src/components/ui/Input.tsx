@@ -1,7 +1,6 @@
 "use client";
 
 import { forwardRef, InputHTMLAttributes } from "react";
-import { cn } from "@/lib/utils";
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -10,15 +9,21 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, label, error, helperText, type = "text", id, ...props }, ref) => {
+  ({ label, error, helperText, type = "text", id, style, ...props }, ref) => {
     const inputId = id || label?.toLowerCase().replace(/\s/g, "-");
 
     return (
-      <div className="w-full">
+      <div style={{ width: '100%' }}>
         {label && (
           <label
             htmlFor={inputId}
-            className="block text-base font-medium text-[var(--gray-700)] mb-2"
+            style={{
+              display: 'block',
+              fontSize: '15px',
+              fontWeight: 500,
+              color: 'var(--gray-700)',
+              marginBottom: '8px'
+            }}
           >
             {label}
           </label>
@@ -27,16 +32,19 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           id={inputId}
           type={type}
-          className={cn(
-            "w-full h-12 px-4 text-base rounded-lg border bg-white transition-all duration-200",
-            "placeholder:text-[var(--gray-400)]",
-            "focus:outline-none focus:ring-2 focus:ring-offset-0",
-            error
-              ? "border-[var(--error-500)] focus:ring-[var(--error-500)] focus:border-[var(--error-500)]"
-              : "border-[var(--gray-300)] focus:ring-[var(--primary-500)] focus:border-[var(--primary-500)]",
-            "disabled:bg-[var(--gray-100)] disabled:cursor-not-allowed",
-            className
-          )}
+          style={{
+            width: '100%',
+            height: '52px',
+            padding: '0 16px',
+            fontSize: '16px',
+            borderRadius: '10px',
+            border: error ? '1px solid var(--error-500)' : '1px solid var(--gray-300)',
+            backgroundColor: props.disabled ? 'var(--gray-100)' : 'white',
+            transition: 'all 0.2s',
+            outline: 'none',
+            cursor: props.disabled ? 'not-allowed' : 'text',
+            ...style
+          }}
           aria-invalid={error ? "true" : "false"}
           aria-describedby={error ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined}
           {...props}
@@ -44,7 +52,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {error && (
           <p
             id={`${inputId}-error`}
-            className="mt-2 text-sm text-[var(--error-500)]"
+            style={{
+              marginTop: '8px',
+              fontSize: '14px',
+              color: 'var(--error-500)'
+            }}
             role="alert"
           >
             {error}
@@ -53,7 +65,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {helperText && !error && (
           <p
             id={`${inputId}-helper`}
-            className="mt-2 text-sm text-[var(--gray-500)]"
+            style={{
+              marginTop: '8px',
+              fontSize: '14px',
+              color: 'var(--gray-500)'
+            }}
           >
             {helperText}
           </p>

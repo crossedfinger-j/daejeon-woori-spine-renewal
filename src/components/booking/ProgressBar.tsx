@@ -1,7 +1,6 @@
 "use client";
 
 import { Check } from "lucide-react";
-import { cn } from "@/lib/utils";
 
 interface ProgressBarProps {
   currentStep: number;
@@ -17,58 +16,66 @@ const steps = [
 
 export function ProgressBar({ currentStep, totalSteps = 4 }: ProgressBarProps) {
   return (
-    <div className="w-full">
+    <div style={{ width: '100%', marginBottom: '40px' }}>
       {/* Mobile Progress */}
-      <div className="lg:hidden mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-sm text-[var(--gray-500)]">
+      <div style={{ display: 'none' }} className="lg:hidden">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+          <span style={{ fontSize: '14px', color: 'var(--gray-500)' }}>
             {steps[currentStep - 1]?.label}
           </span>
-          <span className="text-sm font-medium text-[var(--primary-600)]">
+          <span style={{ fontSize: '14px', fontWeight: 500, color: 'var(--primary-600)' }}>
             {currentStep}/{totalSteps}
           </span>
         </div>
-        <div className="h-2 bg-[var(--gray-200)] rounded-full overflow-hidden">
+        <div style={{ height: '8px', backgroundColor: 'var(--gray-200)', borderRadius: '9999px', overflow: 'hidden' }}>
           <div
-            className="h-full bg-[var(--primary-500)] rounded-full transition-all duration-300"
-            style={{ width: `${(currentStep / totalSteps) * 100}%` }}
+            style={{
+              height: '100%',
+              backgroundColor: 'var(--primary-500)',
+              borderRadius: '9999px',
+              transition: 'all 0.3s',
+              width: `${(currentStep / totalSteps) * 100}%`
+            }}
           />
         </div>
       </div>
 
       {/* Desktop Progress */}
-      <div className="hidden lg:flex items-center justify-center gap-4 mb-8">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
         {steps.map((step, index) => {
           const isCompleted = currentStep > step.number;
           const isCurrent = currentStep === step.number;
           const isLast = index === steps.length - 1;
 
           return (
-            <div key={step.number} className="flex items-center">
-              <div className="flex items-center gap-3">
+            <div key={step.number} style={{ display: 'flex', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div
-                  className={cn(
-                    "w-10 h-10 rounded-full flex items-center justify-center font-medium transition-all",
-                    isCompleted
-                      ? "bg-[var(--primary-500)] text-white"
-                      : isCurrent
-                      ? "bg-[var(--primary-500)] text-white ring-4 ring-[var(--primary-100)]"
-                      : "bg-[var(--gray-200)] text-[var(--gray-500)]"
-                  )}
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 500,
+                    transition: 'all 0.2s',
+                    backgroundColor: isCompleted || isCurrent ? 'var(--primary-500)' : 'var(--gray-200)',
+                    color: isCompleted || isCurrent ? 'white' : 'var(--gray-500)',
+                    boxShadow: isCurrent ? '0 0 0 4px var(--primary-100)' : 'none'
+                  }}
                 >
                   {isCompleted ? (
-                    <Check className="w-5 h-5" />
+                    <Check style={{ width: '20px', height: '20px' }} />
                   ) : (
                     step.number
                   )}
                 </div>
                 <span
-                  className={cn(
-                    "font-medium",
-                    isCurrent || isCompleted
-                      ? "text-[var(--gray-900)]"
-                      : "text-[var(--gray-400)]"
-                  )}
+                  style={{
+                    fontWeight: 500,
+                    color: isCurrent || isCompleted ? 'var(--gray-900)' : 'var(--gray-400)'
+                  }}
                 >
                   {step.label}
                 </span>
@@ -76,10 +83,13 @@ export function ProgressBar({ currentStep, totalSteps = 4 }: ProgressBarProps) {
 
               {!isLast && (
                 <div
-                  className={cn(
-                    "w-16 h-0.5 mx-4",
-                    isCompleted ? "bg-[var(--primary-500)]" : "bg-[var(--gray-200)]"
-                  )}
+                  style={{
+                    width: '64px',
+                    height: '2px',
+                    marginLeft: '16px',
+                    marginRight: '16px',
+                    backgroundColor: isCompleted ? 'var(--primary-500)' : 'var(--gray-200)'
+                  }}
                 />
               )}
             </div>

@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui";
 import {
   BookingCalendar,
   TimeSlotPicker,
@@ -59,65 +58,108 @@ export default function SchedulePage() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div style={{ position: 'relative', maxWidth: '72rem', marginLeft: 'auto', marginRight: 'auto', paddingTop: '140px', paddingBottom: '32px', paddingLeft: '24px', paddingRight: '24px' }}>
+      {/* 왼쪽 이전 버튼 */}
+      <div style={{
+        position: 'fixed',
+        left: '24px',
+        top: '50%',
+        transform: 'translateY(-50%)',
+        zIndex: 30
+      }}>
+        <button
+          onClick={handleBack}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '56px',
+            height: '56px',
+            borderRadius: '50%',
+            backgroundColor: 'white',
+            border: '1px solid var(--gray-200)',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            cursor: 'pointer',
+            transition: 'all 0.2s'
+          }}
+        >
+          <ArrowLeft style={{ width: '24px', height: '24px', color: 'var(--gray-600)' }} />
+        </button>
+      </div>
+
+      {/* 오른쪽 다음 버튼 */}
+      <div style={{
+        position: 'fixed',
+        right: '24px',
+        top: '50%',
+        transform: 'translateY(-50%)',
+        zIndex: 30
+      }}>
+        <button
+          onClick={handleNext}
+          disabled={!canProceed}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            padding: '16px 24px',
+            borderRadius: '9999px',
+            backgroundColor: canProceed ? 'var(--primary-500)' : 'var(--gray-300)',
+            border: 'none',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+            cursor: canProceed ? 'pointer' : 'not-allowed',
+            transition: 'all 0.2s',
+            color: 'white',
+            fontSize: '16px',
+            fontWeight: 600
+          }}
+        >
+          <span>다음</span>
+          <ArrowRight style={{ width: '20px', height: '20px' }} />
+        </button>
+      </div>
+
       <ProgressBar currentStep={3} />
 
-      <div className="mb-8">
-        <h1 className="text-2xl lg:text-3xl font-bold text-[var(--gray-900)] mb-2">
+      <div style={{ marginBottom: '32px' }}>
+        <h1 style={{ fontSize: '1.75rem', fontWeight: 700, color: 'var(--gray-900)', marginBottom: '8px' }}>
           예약 일시를 선택해주세요
         </h1>
-        <p className="text-[var(--gray-600)]">
-          {selectedDoctor.name} {selectedDoctor.title}의 진료 가능 시간입니다
+        <p style={{ color: 'var(--gray-600)', fontSize: '16px' }}>
+          <span style={{ whiteSpace: 'nowrap' }}>{selectedDoctor.name} {selectedDoctor.title}</span>의 진료 가능 시간입니다
         </p>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-8">
-        {/* Calendar & Time Slots */}
-        <div className="lg:col-span-2 space-y-6">
-          <BookingCalendar
-            selectedDate={selectedDate}
-            onSelectDate={setDate}
-            availableDates={availableDates}
-          />
-
-          <TimeSlotPicker
-            selectedDate={selectedDate}
-            selectedTime={selectedTime}
-            onSelectTime={setTime}
-            timeSlots={selectedDoctor.availableSlots}
-          />
-        </div>
-
-        {/* Summary Sidebar */}
-        <div className="lg:col-span-1">
-          <div className="sticky top-24">
-            <BookingSummary
-              symptoms={selectedSymptoms}
-              doctor={selectedDoctor}
-              date={selectedDate}
-              time={selectedTime}
-            />
-          </div>
-        </div>
+      {/* Summary - 컴팩트 모드 */}
+      <div style={{ marginBottom: '24px' }}>
+        <BookingSummary
+          symptoms={selectedSymptoms}
+          doctor={selectedDoctor}
+          date={selectedDate}
+          time={selectedTime}
+          compact
+        />
       </div>
 
-      {/* Navigation */}
-      <div className="flex justify-between gap-4 mt-10 pt-6 border-t border-[var(--gray-200)]">
-        <Button
-          variant="ghost"
-          onClick={handleBack}
-          leftIcon={<ArrowLeft className="w-5 h-5" />}
-        >
-          이전: 의료진 선택
-        </Button>
-        <Button
-          onClick={handleNext}
-          disabled={!canProceed}
-          rightIcon={<ArrowRight className="w-5 h-5" />}
-        >
-          다음: 예약 확인
-        </Button>
+      {/* Calendar & Time Slots - 가로 배치 */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', alignItems: 'start' }}>
+        <BookingCalendar
+          selectedDate={selectedDate}
+          onSelectDate={setDate}
+          availableDates={availableDates}
+          compact
+        />
+
+        <TimeSlotPicker
+          selectedDate={selectedDate}
+          selectedTime={selectedTime}
+          onSelectTime={setTime}
+          timeSlots={selectedDoctor.availableSlots}
+          compact
+        />
       </div>
+
     </div>
   );
 }

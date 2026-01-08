@@ -46,8 +46,8 @@ export function Header() {
             <Navigation />
           </nav>
 
-          {/* Desktop Actions - CTA 버튼 독립적 분리 (ml-8) */}
-          <div className="hidden lg:flex items-center">
+          {/* Desktop Actions - 전화번호와 예약 버튼 간격 확대 */}
+          <div className="hidden lg:flex items-center gap-6">
             <a
               href="tel:1577-0052"
               className="flex items-center gap-3 text-[var(--primary-600)] font-semibold hover:text-[var(--primary-700)] transition-colors py-3 px-5 rounded-xl hover:bg-[var(--primary-50)]"
@@ -55,10 +55,11 @@ export function Header() {
               <Phone className="w-5 h-5" />
               <span className="text-lg">1577-0052</span>
             </a>
-            {/* 온라인 예약 버튼 - 충분한 내부 여백 */}
+            {/* 온라인 예약 버튼 */}
             <Link
               href="/booking"
-              className="ml-8 h-14 px-8 bg-[var(--primary-500)] text-white text-lg font-semibold rounded-2xl hover:bg-[var(--primary-600)] transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center"
+              style={{ padding: '10px 20px' }}
+              className="bg-[var(--primary-500)] text-white text-base font-semibold rounded-xl hover:bg-[var(--primary-600)] transition-all duration-300 shadow-md hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center"
             >
               온라인 예약
             </Link>

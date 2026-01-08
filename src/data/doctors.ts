@@ -1,16 +1,26 @@
 import { Doctor } from "@/types";
+import { DepartmentType } from "@/types/center";
 
 // 실제 대전우리병원 진료시간 기반 시간 슬롯 생성
 // 평일: 09:00-18:00 (점심 12:30-13:30)
 // 토요일: 09:00-17:00
 // 일요일: 휴무
 //
-// 주의: SSR hydration 불일치 방지를 위해 고정된 기준 날짜와 결정적 가용성 패턴 사용
+// 주의: SSR hydration 불일치 방지를 위해 결정적 가용성 패턴 사용
+// 로컬 시간대 기준 날짜 문자열 생성 (YYYY-MM-DD)
+function formatLocalDate(date: Date): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 function generateTimeSlots(doctorId: string): Doctor["availableSlots"] {
   const slots: Doctor["availableSlots"] = [];
 
-  // 고정된 기준 날짜 사용 (hydration 불일치 방지)
-  const baseDate = new Date("2025-01-08");
+  // 현재 날짜 기준으로 시작 (오늘부터 30일간)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   // 결정적 해시 함수 (Math.random 대신 사용)
   const hashCode = (str: string): number => {
@@ -23,22 +33,22 @@ function generateTimeSlots(doctorId: string): Doctor["availableSlots"] {
     return Math.abs(hash);
   };
 
-  for (let day = 1; day <= 14; day++) {
-    const date = new Date(baseDate);
-    date.setDate(baseDate.getDate() + day);
+  for (let day = 0; day <= 30; day++) {
+    const date = new Date(today);
+    date.setDate(today.getDate() + day);
 
     // 일요일 제외 (휴무)
     if (date.getDay() === 0) continue;
 
-    const dateStr = date.toISOString().split("T")[0];
+    const dateStr = formatLocalDate(date);
     const isSaturday = date.getDay() === 6;
 
-    // 토요일: 09:00-17:00, 평일: 09:00-18:00 (점심시간 제외)
+    // 토요일: 09:00-17:00, 평일: 09:00-18:00 (점심시간 12:30-13:30 제외)
     const times = isSaturday
       ? ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"]
       : ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30", "17:00", "17:30"];
 
-    times.forEach((time, index) => {
+    times.forEach((time) => {
       // 결정적 가용성 패턴: doctorId + 날짜 + 시간을 기반으로 계산
       const seed = hashCode(`${doctorId}-${dateStr}-${time}`);
       const available = seed % 10 > 2; // 약 70% 가용성
@@ -57,13 +67,14 @@ function generateTimeSlots(doctorId: string): Doctor["availableSlots"] {
 // 실제 대전우리병원 의료진 데이터
 // 출처: https://www.woorispine.com/base/2019/sub2/01.php
 export const doctors: Doctor[] = [
-  // === 척추신경외과 ===
+  // === 척추센터 ===
   {
     id: "doc-park-cw",
     name: "박철웅",
     title: "병원장",
     specialty: ["척추내시경수술", "최소침습척추수술", "목디스크", "허리디스크", "척추관협착증"],
     center: "spine",
+    department: "spine-center",
     profileImage: "/images/doctors/park-cheolwoong.jpg",
     education: [
       "연세대학교 의과대학 졸업",
@@ -96,6 +107,7 @@ export const doctors: Doctor[] = [
     title: "척추신경외과 과장",
     specialty: ["척추내시경수술", "목디스크", "허리디스크", "척추관협착증"],
     center: "spine",
+    department: "spine-center",
     profileImage: "/images/doctors/park-woomin.jpg",
     education: [
       "의과대학 졸업",
@@ -117,6 +129,7 @@ export const doctors: Doctor[] = [
     title: "신경외과 전문의",
     specialty: ["뇌종양수술", "내시경척추수술", "후두와병변"],
     center: "spine",
+    department: "spine-center",
     profileImage: "/images/doctors/park-junghoon.jpg",
     education: [
       "의과대학 졸업",
@@ -138,6 +151,7 @@ export const doctors: Doctor[] = [
     title: "신경외과 전문의",
     specialty: ["최소침습척추수술", "내시경척추수술", "경추질환", "요추질환"],
     center: "spine",
+    department: "spine-center",
     profileImage: "/images/doctors/lee-sangmin.jpg",
     education: [
       "의과대학 졸업",
@@ -160,6 +174,7 @@ export const doctors: Doctor[] = [
     title: "신경외과 전문의",
     specialty: ["경추외상", "척추외상", "혈관질환"],
     center: "spine",
+    department: "spine-center",
     profileImage: "/images/doctors/an-taeyong.jpg",
     education: [
       "의과대학 졸업",
@@ -176,13 +191,14 @@ export const doctors: Doctor[] = [
     availableSlots: generateTimeSlots("doc-an-ty"),
   },
 
-  // === 정형외과 ===
+  // === 관절센터 ===
   {
     id: "doc-lee-gw",
     name: "이근욱",
     title: "정형외과 과장",
     specialty: ["어깨관절", "무릎관절", "회전근개파열", "스포츠손상", "골절"],
     center: "joint",
+    department: "joint-center",
     profileImage: "/images/doctors/lee-geunwook.jpg",
     education: [
       "의과대학 졸업",
@@ -205,6 +221,7 @@ export const doctors: Doctor[] = [
     title: "정형외과 전문의",
     specialty: ["족부질환", "발목질환", "발목관절", "스포츠손상"],
     center: "joint",
+    department: "joint-center",
     profileImage: "/images/doctors/ma-taehoon.jpg",
     education: [
       "의과대학 졸업",
@@ -222,6 +239,31 @@ export const doctors: Doctor[] = [
     availableSlots: generateTimeSlots("doc-ma-th"),
   },
 
+  // === 비수술치료센터 ===
+  {
+    id: "doc-kim-hy",
+    name: "김현영",
+    title: "비수술치료센터 과장",
+    specialty: ["FIMS", "신경성형술", "프롤로치료", "신경차단술"],
+    center: "pain",
+    department: "nonsurgical",
+    profileImage: "/images/doctors/kim-hyunyoung.jpg",
+    education: [
+      "의과대학 졸업",
+      "의학석사",
+    ],
+    career: [
+      "現 대전우리병원 비수술치료센터 과장",
+      "FIMS(기능적 근육내자극치료) 전문",
+      "신경성형술 전문",
+      "대한통증학회 정회원",
+    ],
+    certifications: ["마취통증의학과 전문의"],
+    introduction:
+      "수술 없이 통증의 근본 원인을 치료하는 비수술적 치료 전문의입니다.",
+    availableSlots: generateTimeSlots("doc-kim-hy"),
+  },
+
   // === 마취통증의학과 ===
   {
     id: "doc-lee-js",
@@ -229,6 +271,7 @@ export const doctors: Doctor[] = [
     title: "마취통증의학과 과장",
     specialty: ["경막외시술", "척추통증", "만성통증", "신경차단술"],
     center: "pain",
+    department: "pain",
     profileImage: "/images/doctors/lee-junseok.jpg",
     education: [
       "의과대학 졸업",
@@ -251,6 +294,7 @@ export const doctors: Doctor[] = [
     title: "마취통증의학과 전문의",
     specialty: ["만성통증", "신경통", "신경차단술", "통증관리"],
     center: "pain",
+    department: "pain",
     profileImage: "/images/doctors/hong-jangchun.jpg",
     education: [
       "의과대학 졸업",
@@ -272,6 +316,7 @@ export const doctors: Doctor[] = [
     title: "마취통증의학과 전문의",
     specialty: ["통증치료", "신경차단술", "마취"],
     center: "pain",
+    department: "pain",
     profileImage: "/images/doctors/lee-jigu.jpg",
     education: [
       "의과대학 졸업",
@@ -285,7 +330,136 @@ export const doctors: Doctor[] = [
       "안전한 마취와 효과적인 통증 치료로 환자분들의 편안한 치료를 돕습니다.",
     availableSlots: generateTimeSlots("doc-lee-jg"),
   },
+
+  // === 내과 ===
+  {
+    id: "doc-choi-ms",
+    name: "최민수",
+    title: "내과 과장",
+    specialty: ["당뇨병", "고혈압", "고지혈증", "건강검진", "내과질환"],
+    center: "checkup",
+    department: "internal",
+    profileImage: "/images/doctors/choi-minsu.jpg",
+    education: [
+      "의과대학 졸업",
+      "의학석사",
+    ],
+    career: [
+      "現 대전우리병원 내과 과장",
+      "만성질환 관리 전문",
+      "건강검진 전문",
+      "대한내과학회 정회원",
+    ],
+    certifications: ["내과 전문의"],
+    introduction:
+      "척추·관절 수술 전후 내과적 관리와 만성질환 관리를 전문으로 합니다.",
+    availableSlots: generateTimeSlots("doc-choi-ms"),
+  },
+
+  // === 영상의학과 ===
+  {
+    id: "doc-jung-sw",
+    name: "정성우",
+    title: "영상의학과 과장",
+    specialty: ["MRI판독", "CT판독", "척추영상", "관절영상", "초음파"],
+    center: "checkup",
+    department: "radiology",
+    profileImage: "/images/doctors/jung-sungwoo.jpg",
+    education: [
+      "의과대학 졸업",
+      "의학박사",
+    ],
+    career: [
+      "現 대전우리병원 영상의학과 과장",
+      "척추·관절 영상 판독 전문",
+      "근골격계 초음파 전문",
+      "대한영상의학회 정회원",
+    ],
+    certifications: ["영상의학과 전문의"],
+    introduction:
+      "정확한 영상 판독으로 척추·관절 질환의 진단에 기여합니다.",
+    availableSlots: generateTimeSlots("doc-jung-sw"),
+  },
+
+  // === 재활의학과 ===
+  {
+    id: "doc-kim-jh",
+    name: "김진호",
+    title: "재활의학과 과장",
+    specialty: ["척추재활", "관절재활", "수술후재활", "운동치료", "통증재활"],
+    center: "rehab",
+    department: "rehab",
+    profileImage: "/images/doctors/kim-jinho.jpg",
+    education: [
+      "의과대학 졸업",
+      "의학박사",
+    ],
+    career: [
+      "現 대전우리병원 재활의학과 과장",
+      "척추·관절 재활 전문",
+      "수술 후 재활 프로그램 운영",
+      "대한재활의학회 정회원",
+    ],
+    certifications: ["재활의학과 전문의"],
+    introduction:
+      "체계적인 재활 프로그램으로 환자분들의 빠른 일상 복귀를 돕습니다.",
+    availableSlots: generateTimeSlots("doc-kim-jh"),
+  },
+  {
+    id: "doc-yoon-sh",
+    name: "윤서희",
+    title: "재활의학과 전문의",
+    specialty: ["도수치료", "운동재활", "근골격재활", "스포츠재활"],
+    center: "rehab",
+    department: "rehab",
+    profileImage: "/images/doctors/yoon-seohee.jpg",
+    education: [
+      "의과대학 졸업",
+      "의학석사",
+    ],
+    career: [
+      "現 대전우리병원 재활의학과 전문의",
+      "도수치료 전문",
+      "스포츠 재활 전문",
+    ],
+    certifications: ["재활의학과 전문의"],
+    introduction:
+      "맞춤형 재활 치료로 환자분들의 건강한 삶을 되찾아드립니다.",
+    availableSlots: generateTimeSlots("doc-yoon-sh"),
+  },
 ];
+
+// 진료과 정보
+export const departmentInfo: Record<DepartmentType, { name: string; description: string }> = {
+  "spine-center": {
+    name: "척추센터",
+    description: "척추내시경수술의 세계적 권위, 최소침습 척추 치료"
+  },
+  "joint-center": {
+    name: "관절센터",
+    description: "어깨·무릎·발목 관절 질환 전문 치료"
+  },
+  "nonsurgical": {
+    name: "비수술치료센터",
+    description: "FIMS, 신경성형술, 프롤로치료 등 비수술 치료"
+  },
+  "pain": {
+    name: "마취통증의학과",
+    description: "신경차단술, 경막외시술 등 통증 전문 치료"
+  },
+  "internal": {
+    name: "내과",
+    description: "수술 전후 내과적 관리 및 만성질환 관리"
+  },
+  "radiology": {
+    name: "영상의학과",
+    description: "MRI·CT·초음파 정밀 영상 판독"
+  },
+  "rehab": {
+    name: "재활의학과",
+    description: "척추·관절 재활 및 수술 후 회복 프로그램"
+  }
+};
 
 export function getDoctorById(id: string): Doctor | undefined {
   return doctors.find((doctor) => doctor.id === id);
@@ -293,6 +467,10 @@ export function getDoctorById(id: string): Doctor | undefined {
 
 export function getDoctorsByCenter(center: string): Doctor[] {
   return doctors.filter((doctor) => doctor.center === center);
+}
+
+export function getDoctorsByDepartment(department: DepartmentType): Doctor[] {
+  return doctors.filter((doctor) => doctor.department === department);
 }
 
 export function getDoctorsBySymptoms(symptoms: string[]): Doctor[] {

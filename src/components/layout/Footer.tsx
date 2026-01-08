@@ -1,140 +1,190 @@
 "use client";
 
 import Link from "next/link";
-import { Phone, MapPin, Clock, Car, ArrowRight } from "lucide-react";
+import { Phone, MapPin, Clock, Car, ChevronRight } from "lucide-react";
 
-// 실제 대전우리병원 정보
 const hospitalInfo = {
   name: "대전우리병원",
   tagline: "척추·관절 전문",
-  description:
-    "세계양방향척추내시경수술학회(WUBES) 회장 박철웅 병원장이 이끄는 대전 지역 최고의 척추·관절 전문 병원입니다.",
   phone: "1577-0052",
-  fax: "042-478-9114",
   address: "대전광역시 서구 문정로48번길 70 (탄방동)",
-  parking: "300대 이상 주차 가능",
+  parking: "300대 주차 가능",
   hours: {
     weekday: "09:00 - 18:00",
     saturday: "09:00 - 17:00",
     lunch: "12:30 - 13:30",
-    emergency: "24시간 응급환자 진료",
   },
 };
 
+const quickLinks = [
+  { href: "/booking", label: "온라인 예약" },
+  { href: "/centers", label: "전문센터" },
+  { href: "/doctors", label: "의료진" },
+  { href: "/location", label: "오시는 길" },
+];
+
 export function Footer() {
   return (
-    <footer className="bg-[var(--gray-900)] text-white">
-      {/* py-24 (96px) 내부 여백 */}
-      <div style={{ maxWidth: '80rem', marginLeft: 'auto', marginRight: 'auto' }} className="px-8 lg:px-12 py-20 lg:py-24">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-16">
-          {/* 병원 정보 - space-x-4 아이콘-텍스트 */}
-          <div className="lg:col-span-2">
-            <div className="flex items-center gap-5 mb-8">
-              <div className="w-14 h-14 bg-[var(--primary-500)] rounded-2xl flex items-center justify-center">
-                <span className="text-white font-bold text-2xl">W</span>
-              </div>
-              <div>
-                <p className="font-bold text-2xl">{hospitalInfo.name}</p>
-                <p className="text-lg text-[var(--gray-400)]">{hospitalInfo.tagline}</p>
-              </div>
+    <footer style={{
+      background: 'linear-gradient(180deg, #0C1222 0%, #0F172A 100%)',
+      position: 'relative'
+    }}>
+      <div style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: '1px',
+        background: 'linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent)'
+      }} />
+
+      <div style={{
+        maxWidth: '72rem',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        padding: '32px 24px 24px'
+      }}>
+        {/* 상단: 로고 + 전화번호 */}
+        <div style={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: '20px',
+          marginBottom: '24px',
+          paddingBottom: '20px',
+          borderBottom: '1px solid rgba(255,255,255,0.06)'
+        }}>
+          {/* 로고 */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              background: 'linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%)',
+              borderRadius: '10px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <span style={{ color: 'white', fontWeight: 800, fontSize: '20px' }}>W</span>
             </div>
-            <p className="text-lg text-[var(--gray-400)] mb-10 max-w-lg leading-relaxed">
-              {hospitalInfo.description}
-            </p>
-            <div className="space-y-5">
-              <a
-                href={`tel:${hospitalInfo.phone}`}
-                className="flex items-center gap-5 text-[var(--gray-300)] hover:text-white transition-colors group"
-              >
-                <div className="w-13 h-13 bg-[var(--primary-500)]/20 rounded-2xl flex items-center justify-center group-hover:bg-[var(--primary-500)]/30 transition-colors">
-                  <Phone className="w-6 h-6 text-[var(--primary-400)]" />
-                </div>
-                <span className="font-bold text-2xl">{hospitalInfo.phone}</span>
-              </a>
-              <div className="flex items-center gap-5 text-[var(--gray-400)]">
-                <div className="w-13 h-13 bg-[var(--gray-700)] rounded-2xl flex items-center justify-center flex-shrink-0">
-                  <MapPin className="w-6 h-6 text-[var(--gray-400)]" />
-                </div>
-                <span className="text-lg">{hospitalInfo.address}</span>
-              </div>
-              <div className="flex items-center gap-5 text-[var(--gray-400)]">
-                <div className="w-13 h-13 bg-[var(--gray-700)] rounded-2xl flex items-center justify-center flex-shrink-0">
-                  <Car className="w-6 h-6 text-[var(--gray-400)]" />
-                </div>
-                <span className="text-lg">{hospitalInfo.parking}</span>
-              </div>
+            <div>
+              <p style={{ fontWeight: 700, fontSize: '16px', color: 'white' }}>{hospitalInfo.name}</p>
+              <p style={{ fontSize: '12px', color: 'rgba(148, 163, 184, 0.7)' }}>{hospitalInfo.tagline}</p>
             </div>
           </div>
 
-          {/* 진료시간 - space-x-4 간격 */}
+          {/* 전화번호 */}
+          <a
+            href={`tel:${hospitalInfo.phone}`}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              padding: '10px 20px',
+              background: 'rgba(59, 130, 246, 0.1)',
+              border: '1px solid rgba(59, 130, 246, 0.2)',
+              borderRadius: '10px',
+              textDecoration: 'none'
+            }}
+          >
+            <Phone style={{ width: '18px', height: '18px', color: '#3B82F6' }} />
+            <span style={{ fontWeight: 700, fontSize: '18px', color: 'white' }}>{hospitalInfo.phone}</span>
+          </a>
+        </div>
+
+        {/* 메인 컨텐츠 - 3열 */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: '32px',
+          marginBottom: '24px'
+        }}>
+          {/* 진료시간 */}
           <div>
-            <h3 className="font-bold text-xl mb-8 flex items-center gap-3">
-              <Clock className="w-6 h-6 text-[var(--primary-400)]" />
-              진료시간
-            </h3>
-            <ul className="space-y-5 text-lg">
-              <li className="flex justify-between text-[var(--gray-400)]">
-                <span>평일</span>
-                <span className="font-semibold text-white">{hospitalInfo.hours.weekday}</span>
-              </li>
-              <li className="flex justify-between text-[var(--gray-400)]">
-                <span>토요일</span>
-                <span className="font-semibold text-white">{hospitalInfo.hours.saturday}</span>
-              </li>
-              <li className="flex justify-between text-[var(--gray-400)]">
-                <span>점심시간</span>
-                <span className="font-semibold text-white">{hospitalInfo.hours.lunch}</span>
-              </li>
-              <li className="flex justify-between text-[var(--error-400)] pt-5 border-t border-[var(--gray-700)]">
-                <span>일/공휴일</span>
-                <span className="font-semibold">휴진</span>
-              </li>
-              <li className="flex justify-between text-[var(--success-500)] pt-5">
-                <span>응급</span>
-                <span className="font-bold">24시간</span>
-              </li>
-            </ul>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+              <Clock style={{ width: '14px', height: '14px', color: '#3B82F6' }} />
+              <h3 style={{ fontWeight: 600, fontSize: '13px', color: 'white' }}>진료시간</h3>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'rgba(148, 163, 184, 0.7)' }}>평일</span>
+                <span style={{ color: 'white' }}>{hospitalInfo.hours.weekday}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'rgba(148, 163, 184, 0.7)' }}>토요일</span>
+                <span style={{ color: 'white' }}>{hospitalInfo.hours.saturday}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'rgba(148, 163, 184, 0.7)' }}>점심</span>
+                <span style={{ color: 'rgba(148, 163, 184, 0.8)' }}>{hospitalInfo.hours.lunch}</span>
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '6px', paddingTop: '6px', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                <span style={{ fontSize: '12px', color: '#F87171', backgroundColor: 'rgba(248, 113, 113, 0.1)', padding: '2px 8px', borderRadius: '4px', whiteSpace: 'nowrap' }}>일/공휴일 휴진</span>
+                <span style={{ fontSize: '12px', color: '#4ADE80', backgroundColor: 'rgba(74, 222, 128, 0.1)', padding: '2px 8px', borderRadius: '4px', whiteSpace: 'nowrap' }}>응급 24시간</span>
+              </div>
+            </div>
           </div>
 
           {/* 바로가기 */}
           <div>
-            <h3 className="font-bold text-xl mb-8">바로가기</h3>
-            <ul className="space-y-5">
-              {[
-                { href: "/booking", label: "온라인 예약" },
-                { href: "/centers", label: "전문센터 안내" },
-                { href: "/doctors", label: "의료진 소개" },
-                { href: "/location", label: "오시는 길" },
-                { href: "/certificate", label: "증명서 발급" },
-              ].map((item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="flex items-center gap-3 text-lg text-[var(--gray-400)] hover:text-white transition-colors group"
-                  >
-                    <span>{item.label}</span>
-                    <ArrowRight className="w-5 h-5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                  </Link>
-                </li>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+              <ChevronRight style={{ width: '14px', height: '14px', color: '#3B82F6' }} />
+              <h3 style={{ fontWeight: 600, fontSize: '13px', color: 'white' }}>바로가기</h3>
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px 16px' }}>
+              {quickLinks.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  style={{
+                    fontSize: '13px',
+                    color: 'rgba(148, 163, 184, 0.7)',
+                    textDecoration: 'none'
+                  }}
+                >
+                  {item.label}
+                </Link>
               ))}
-            </ul>
+            </div>
+          </div>
+
+          {/* 오시는 길 */}
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+              <MapPin style={{ width: '14px', height: '14px', color: '#3B82F6' }} />
+              <h3 style={{ fontWeight: 600, fontSize: '13px', color: 'white' }}>오시는 길</h3>
+            </div>
+            <p style={{ fontSize: '13px', color: 'rgba(148, 163, 184, 0.7)', lineHeight: '1.5', marginBottom: '6px' }}>
+              {hospitalInfo.address}
+            </p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px', color: 'rgba(148, 163, 184, 0.6)' }}>
+              <Car style={{ width: '12px', height: '12px' }} />
+              <span>{hospitalInfo.parking}</span>
+            </div>
           </div>
         </div>
 
-        {/* 하단 - mt-16 (64px), pt-10 */}
-        <div className="mt-16 pt-10 border-t border-[var(--gray-800)]">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            <p className="text-lg text-[var(--gray-500)]">
-              © 2025 대전우리병원. All rights reserved.
-            </p>
-            <div className="flex gap-10 text-lg text-[var(--gray-500)]">
-              <Link href="/privacy" className="hover:text-white transition-colors">
-                개인정보처리방침
-              </Link>
-              <Link href="/terms" className="hover:text-white transition-colors">
-                이용약관
-              </Link>
-            </div>
+        {/* 하단 저작권 */}
+        <div style={{
+          borderTop: '1px solid rgba(255,255,255,0.05)',
+          paddingTop: '16px',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: '12px'
+        }}>
+          <p style={{ fontSize: '12px', color: 'rgba(71, 85, 105, 0.7)' }}>
+            © 2025 대전우리병원. All rights reserved.
+          </p>
+          <div style={{ display: 'flex', gap: '16px' }}>
+            <Link href="/privacy" style={{ fontSize: '12px', color: 'rgba(71, 85, 105, 0.7)', textDecoration: 'none' }}>
+              개인정보처리방침
+            </Link>
+            <Link href="/terms" style={{ fontSize: '12px', color: 'rgba(71, 85, 105, 0.7)', textDecoration: 'none' }}>
+              이용약관
+            </Link>
           </div>
         </div>
       </div>

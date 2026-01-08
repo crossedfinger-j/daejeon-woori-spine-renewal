@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, ButtonHTMLAttributes } from "react";
+import { forwardRef, ButtonHTMLAttributes, CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
@@ -11,6 +11,14 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
 }
+
+// 인라인 스타일로 패딩 적용 - 세련된 여백
+const sizeStyles: Record<string, CSSProperties> = {
+  sm: { padding: '8px 16px', minHeight: '36px', fontSize: '14px', gap: '6px' },
+  md: { padding: '10px 20px', minHeight: '40px', fontSize: '15px', gap: '8px' },
+  lg: { padding: '12px 24px', minHeight: '44px', fontSize: '16px', gap: '8px' },
+  xl: { padding: '14px 28px', minHeight: '48px', fontSize: '17px', gap: '10px' },
+};
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
@@ -23,6 +31,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       rightIcon,
       children,
       disabled,
+      style,
       ...props
     },
     ref
@@ -44,18 +53,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         "bg-[var(--primary-500)] text-white shadow-xl hover:bg-[var(--primary-600)] hover:shadow-2xl hover:-translate-y-1 focus-visible:ring-[var(--primary-400)]",
     };
 
-    // Silver-Friendly: 최소 h-14 (56px), px-8 (32px) 이상 터치 타겟
-    const sizes = {
-      sm: "h-12 px-6 py-3 text-base gap-2.5",         // 48px
-      md: "h-14 px-8 py-4 text-lg gap-3",             // 56px - 최소 터치 타겟
-      lg: "h-16 px-10 py-5 text-xl gap-3.5",          // 64px
-      xl: "h-[4.5rem] px-12 py-6 text-xl gap-4",      // 72px - 매우 큰 버튼
-    };
-
     return (
       <button
         ref={ref}
-        className={cn(baseStyles, variants[variant], sizes[size], className)}
+        className={cn(baseStyles, variants[variant], className)}
+        style={{ ...sizeStyles[size], ...style }}
         disabled={disabled || isLoading}
         {...props}
       >

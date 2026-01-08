@@ -2,10 +2,10 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { ArrowRight, Clock, UserCheck, Calendar, ClipboardCheck } from "lucide-react";
-import { Button, Card, CardContent } from "@/components/ui";
+import { Button } from "@/components/ui";
 import { useBookingStore } from "@/stores/bookingStore";
+import { PageHeader } from "@/components/common";
 
 const steps = [
   {
@@ -44,58 +44,79 @@ export default function BookingPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="text-center mb-12">
-        <h1 className="text-3xl lg:text-4xl font-bold text-[var(--gray-900)] mb-4">
-          온라인 진료 예약
-        </h1>
-        <p className="text-lg text-[var(--gray-600)] max-w-2xl mx-auto">
-          증상에 맞는 전문의를 추천받고, 원하는 시간에 편리하게 예약하세요
-        </p>
-      </div>
+    <main style={{ paddingTop: '80px', minHeight: '100vh', backgroundColor: 'var(--slate-50)' }}>
+      <PageHeader
+        title="온라인 진료 예약"
+        description="증상에 맞는 전문의를 추천받고, 원하는 시간에 편리하게 예약하세요"
+      />
 
-      {/* Steps */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
-        {steps.map((step, index) => (
-          <Card key={index} className="text-center">
-            <CardContent className="pt-6">
-              <div className="w-14 h-14 bg-[var(--primary-50)] rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <step.icon className="w-7 h-7 text-[var(--primary-500)]" />
+      <div style={{ maxWidth: '80rem', margin: '0 auto', padding: '24px 20px' }}>
+        {/* Steps */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, 1fr)',
+          gap: '12px',
+          marginBottom: '40px'
+        }}>
+          {steps.map((step, index) => (
+            <div
+              key={index}
+              style={{
+                backgroundColor: 'white',
+                borderRadius: '16px',
+                border: '1px solid var(--slate-200)',
+                padding: '20px 16px',
+                textAlign: 'center'
+              }}
+            >
+              <div style={{
+                width: '44px',
+                height: '44px',
+                backgroundColor: 'var(--primary-50)',
+                borderRadius: '12px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 12px'
+              }}>
+                <step.icon style={{ width: '22px', height: '22px', color: 'var(--primary-500)' }} />
               </div>
-              <div className="text-sm font-medium text-[var(--primary-600)] mb-1">
+              <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--primary-600)', marginBottom: '4px' }}>
                 STEP {index + 1}
               </div>
-              <h3 className="font-semibold text-[var(--gray-900)] mb-2">
+              <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--gray-900)', marginBottom: '6px' }}>
                 {step.title}
               </h3>
-              <p className="text-sm text-[var(--gray-500)]">{step.description}</p>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+              <p style={{ fontSize: '14px', color: 'var(--gray-500)', lineHeight: '1.5' }}>
+                {step.description}
+              </p>
+            </div>
+          ))}
+        </div>
 
-      {/* CTA */}
-      <div className="text-center">
-        <Button
-          size="lg"
-          onClick={handleStart}
-          rightIcon={<ArrowRight className="w-5 h-5" />}
-          className="min-w-[200px]"
-        >
-          예약 시작하기
-        </Button>
-
-        <p className="mt-6 text-sm text-[var(--gray-500)]">
-          전화 예약을 원하시면{" "}
-          <a
-            href="tel:1577-0052"
-            className="text-[var(--primary-600)] font-medium hover:underline"
+        {/* CTA */}
+        <div style={{ textAlign: 'center', paddingTop: '8px' }}>
+          <Button
+            size="lg"
+            onClick={handleStart}
+            rightIcon={<ArrowRight style={{ width: '20px', height: '20px' }} />}
+            style={{ minWidth: '200px' }}
           >
-            1577-0052
-          </a>
-          로 연락주세요
-        </p>
+            예약 시작하기
+          </Button>
+
+          <p style={{ marginTop: '24px', fontSize: '14px', color: 'var(--gray-500)', lineHeight: 1.6 }}>
+            <span style={{ whiteSpace: 'nowrap' }}>전화 예약을 원하시면</span>{" "}
+            <a
+              href="tel:1577-0052"
+              style={{ color: 'var(--primary-600)', fontWeight: 500, whiteSpace: 'nowrap' }}
+            >
+              1577-0052
+            </a>
+            <span style={{ whiteSpace: 'nowrap' }}>로 연락주세요</span>
+          </p>
+        </div>
       </div>
-    </div>
+    </main>
   );
 }

@@ -11,14 +11,25 @@ interface NavigationProps {
 
 const navItems = [
   { href: "/centers", label: "전문센터" },
-  { href: "/doctors", label: "의료진 소개" },
+  { href: "/doctors", label: "의료진" },
   { href: "/booking", label: "진료예약" },
+  { href: "/booking/lookup", label: "예약조회" },
   { href: "/location", label: "오시는 길" },
-  { href: "/certificate", label: "증명서 발급" },
+  { href: "/certificate", label: "증명서" },
 ];
 
 export function Navigation({ isMobile = false, onItemClick }: NavigationProps) {
   const pathname = usePathname();
+
+  // 현재 경로가 해당 메뉴와 일치하는지 확인 (더 구체적인 경로 우선)
+  const isActive = (href: string) => {
+    // 정확히 일치하는 경우
+    if (pathname === href) return true;
+    // /booking/lookup은 /booking과 구분
+    if (href === "/booking" && pathname.startsWith("/booking/lookup")) return false;
+    // 하위 경로 포함
+    return pathname.startsWith(href + "/");
+  };
 
   if (isMobile) {
     return (
@@ -30,7 +41,7 @@ export function Navigation({ isMobile = false, onItemClick }: NavigationProps) {
               onClick={onItemClick}
               className={cn(
                 "block px-5 py-4 rounded-xl text-base font-medium transition-all",
-                pathname.startsWith(item.href)
+                isActive(item.href)
                   ? "bg-[var(--primary-50)] text-[var(--primary-600)] border-l-4 border-[var(--primary-500)]"
                   : "text-[var(--gray-700)] hover:bg-[var(--gray-50)] hover:text-[var(--primary-600)]"
               )}
@@ -61,7 +72,7 @@ export function Navigation({ isMobile = false, onItemClick }: NavigationProps) {
             className={cn(
               // 그룹으로 묶어 hover 시 하단 인디케이터 표시
               "group relative py-2 text-lg font-medium transition-all duration-300",
-              pathname.startsWith(item.href)
+              isActive(item.href)
                 ? "text-[var(--primary-600)]"
                 : "text-[var(--gray-600)] hover:text-[var(--primary-600)]"
             )}
@@ -71,7 +82,7 @@ export function Navigation({ isMobile = false, onItemClick }: NavigationProps) {
             <span
               className={cn(
                 "absolute -bottom-1 left-0 h-0.5 bg-[var(--primary-500)] rounded-full transition-all duration-300",
-                pathname.startsWith(item.href)
+                isActive(item.href)
                   ? "w-full"
                   : "w-0 group-hover:w-full"
               )}

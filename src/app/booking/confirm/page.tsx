@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ArrowLeft, CheckCircle, Home, Calendar } from "lucide-react";
+import { ArrowLeft, CheckCircle, Home, Calendar, Phone } from "lucide-react";
 import { Button, Modal } from "@/components/ui";
 import {
   BookingForm,
@@ -12,7 +12,6 @@ import {
 import { useBookingStore } from "@/stores/bookingStore";
 import { PatientFormData } from "@/lib/validation";
 import { formatDate } from "@/lib/utils";
-import Link from "next/link";
 
 export default function ConfirmPage() {
   const router = useRouter();
@@ -68,51 +67,63 @@ export default function ConfirmPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div style={{ position: 'relative', maxWidth: '56rem', marginLeft: 'auto', marginRight: 'auto', paddingTop: '140px', paddingBottom: '32px', paddingLeft: '24px', paddingRight: '24px' }}>
+      {/* 왼쪽 이전 버튼 */}
+      <div style={{
+        position: 'fixed',
+        left: '24px',
+        top: '50%',
+        transform: 'translateY(-50%)',
+        zIndex: 30
+      }}>
+        <button
+          onClick={handleBack}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '56px',
+            height: '56px',
+            borderRadius: '50%',
+            backgroundColor: 'white',
+            border: '1px solid var(--gray-200)',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            cursor: 'pointer',
+            transition: 'all 0.2s'
+          }}
+        >
+          <ArrowLeft style={{ width: '24px', height: '24px', color: 'var(--gray-600)' }} />
+        </button>
+      </div>
+
       <ProgressBar currentStep={4} />
 
-      <div className="mb-8">
-        <h1 className="text-2xl lg:text-3xl font-bold text-[var(--gray-900)] mb-2">
+      <div style={{ marginBottom: '32px' }}>
+        <h1 style={{ fontSize: '1.75rem', fontWeight: 700, color: 'var(--gray-900)', marginBottom: '8px' }}>
           예약 정보를 확인해주세요
         </h1>
-        <p className="text-[var(--gray-600)]">
+        <p style={{ color: 'var(--gray-600)', fontSize: '16px' }}>
           환자 정보를 입력하고 예약을 완료해주세요
         </p>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-8">
-        {/* Form */}
-        <div className="lg:col-span-2">
-          <div className="bg-white rounded-2xl border border-[var(--gray-200)] p-6">
-            <h2 className="text-xl font-semibold text-[var(--gray-900)] mb-6">
-              환자 정보 입력
-            </h2>
-            <BookingForm onSubmit={handleSubmit} isLoading={isSubmitting} />
-          </div>
-        </div>
-
-        {/* Summary Sidebar */}
-        <div className="lg:col-span-1">
-          <div className="sticky top-24">
-            <BookingSummary
-              symptoms={selectedSymptoms}
-              doctor={selectedDoctor}
-              date={selectedDate}
-              time={selectedTime}
-            />
-          </div>
-        </div>
+      {/* Summary - 컴팩트 모드 */}
+      <div style={{ marginBottom: '24px' }}>
+        <BookingSummary
+          symptoms={selectedSymptoms}
+          doctor={selectedDoctor}
+          date={selectedDate}
+          time={selectedTime}
+          compact
+        />
       </div>
 
-      {/* Back Button */}
-      <div className="mt-10 pt-6 border-t border-[var(--gray-200)]">
-        <Button
-          variant="ghost"
-          onClick={handleBack}
-          leftIcon={<ArrowLeft className="w-5 h-5" />}
-        >
-          이전: 시간 선택
-        </Button>
+      {/* Form */}
+      <div style={{ backgroundColor: 'white', borderRadius: '16px', border: '1px solid var(--gray-200)', padding: '24px' }}>
+        <h2 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--gray-900)', marginBottom: '24px' }}>
+          환자 정보 입력
+        </h2>
+        <BookingForm onSubmit={handleSubmit} isLoading={isSubmitting} />
       </div>
 
       {/* Success Modal */}
@@ -120,62 +131,103 @@ export default function ConfirmPage() {
         isOpen={showSuccessModal}
         onClose={() => {}}
         size="md"
+        hideCloseButton={true}
+        title="예약 완료"
       >
-        <div className="text-center py-6">
-          <div className="w-20 h-20 bg-[var(--success-50)] rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle className="w-10 h-10 text-[var(--success-500)]" />
+        <div style={{ textAlign: 'center', paddingTop: '8px' }}>
+          {/* 성공 아이콘 */}
+          <div style={{
+            width: '72px',
+            height: '72px',
+            backgroundColor: 'var(--success-50)',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 20px'
+          }}>
+            <CheckCircle style={{ width: '36px', height: '36px', color: 'var(--success-500)' }} />
           </div>
 
-          <h2 className="text-2xl font-bold text-[var(--gray-900)] mb-2">
-            예약이 완료되었습니다
+          <h2 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--gray-900)', marginBottom: '12px' }}>
+            예약 접수가 완료되었습니다
           </h2>
-          <p className="text-[var(--gray-600)] mb-6">
-            예약 확인 문자가 발송됩니다
-          </p>
 
-          <div className="bg-[var(--gray-50)] rounded-xl p-4 mb-6">
-            <p className="text-sm text-[var(--gray-500)] mb-1">예약 번호</p>
-            <p className="text-xl font-bold text-[var(--primary-600)]">
+          {/* 예약 번호 */}
+          <div style={{
+            backgroundColor: 'var(--primary-50)',
+            borderRadius: '12px',
+            padding: '16px',
+            marginBottom: '16px',
+            border: '1px solid var(--primary-100)'
+          }}>
+            <p style={{ fontSize: '13px', color: 'var(--primary-600)', marginBottom: '4px' }}>예약 번호</p>
+            <p style={{ fontSize: '24px', fontWeight: 700, color: 'var(--primary-600)', letterSpacing: '1px' }}>
               {bookingNumber}
             </p>
           </div>
 
-          <div className="bg-[var(--primary-50)] rounded-xl p-4 mb-8 text-left">
-            <div className="flex items-center gap-3 mb-3">
-              <Calendar className="w-5 h-5 text-[var(--primary-500)]" />
-              <span className="font-medium text-[var(--gray-900)]">
+          {/* 중요 안내 */}
+          <p style={{
+            fontSize: '15px',
+            color: 'var(--warning-700)',
+            backgroundColor: 'var(--warning-50)',
+            padding: '14px 16px',
+            borderRadius: '10px',
+            marginBottom: '16px',
+            fontWeight: 500,
+            lineHeight: 1.6
+          }}>
+            접수 시 예약번호를 말씀해주세요
+          </p>
+
+          {/* 예약 일정 */}
+          <div style={{
+            backgroundColor: 'var(--gray-50)',
+            borderRadius: '12px',
+            padding: '16px',
+            marginBottom: '20px',
+            textAlign: 'left'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+              <Calendar style={{ width: '18px', height: '18px', color: 'var(--primary-500)' }} />
+              <span style={{ fontWeight: 600, color: 'var(--gray-900)', fontSize: '15px' }}>
                 예약 일정
               </span>
             </div>
-            <p className="text-[var(--gray-700)]">
+            <p style={{ color: 'var(--gray-800)', fontSize: '15px', fontWeight: 500, marginBottom: '4px' }}>
               {formatDate(new Date(selectedDate!))} {selectedTime}
             </p>
-            <p className="text-[var(--gray-600)]">
+            <p style={{ color: 'var(--gray-600)', fontSize: '14px' }}>
               {selectedDoctor?.name} {selectedDoctor?.title}
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-3">
-            <Button
-              variant="secondary"
-              className="flex-1"
-              onClick={handleGoHome}
-              leftIcon={<Home className="w-5 h-5" />}
-            >
-              홈으로
-            </Button>
-            <Link href="/booking" className="flex-1">
-              <Button
-                className="w-full"
-                onClick={() => {
-                  setShowSuccessModal(false);
-                  resetBooking();
-                }}
-              >
-                새 예약하기
-              </Button>
-            </Link>
+          {/* 전화 안내 */}
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '8px',
+            marginBottom: '20px',
+            padding: '12px',
+            backgroundColor: 'var(--gray-100)',
+            borderRadius: '10px'
+          }}>
+            <Phone style={{ width: '16px', height: '16px', color: 'var(--gray-600)' }} />
+            <span style={{ fontSize: '14px', color: 'var(--gray-600)', whiteSpace: 'nowrap' }}>
+              예약 문의: <strong style={{ color: 'var(--gray-900)' }}>1577-0052</strong>
+            </span>
           </div>
+
+          {/* 버튼 */}
+          <Button
+            style={{ width: '100%', height: '52px' }}
+            onClick={handleGoHome}
+            leftIcon={<Home style={{ width: '18px', height: '18px' }} />}
+          >
+            홈으로 돌아가기
+          </Button>
         </div>
       </Modal>
     </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { Doctor, Symptom } from "@/types";
-import { Card, Badge } from "@/components/ui";
+import { Badge } from "@/components/ui";
 import { Calendar, Clock, User, Stethoscope } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 
@@ -10,25 +10,117 @@ interface BookingSummaryProps {
   doctor: Doctor | null;
   date: string | null;
   time: string | null;
+  compact?: boolean;
 }
 
-export function BookingSummary({ symptoms, doctor, date, time }: BookingSummaryProps) {
+export function BookingSummary({ symptoms, doctor, date, time, compact = false }: BookingSummaryProps) {
+  // 컴팩트 모드: 가로로 한 줄에 표시
+  if (compact) {
+    return (
+      <div
+        style={{
+          backgroundColor: 'var(--gray-50)',
+          borderRadius: '12px',
+          padding: '16px 20px',
+          border: '1px solid var(--gray-200)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '24px',
+          flexWrap: 'wrap'
+        }}
+      >
+        <h3 style={{
+          fontSize: '16px',
+          fontWeight: 600,
+          color: 'var(--gray-700)',
+          whiteSpace: 'nowrap'
+        }}>
+          예약 정보 확인
+        </h3>
+
+        {/* Symptoms */}
+        {symptoms.length > 0 && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Stethoscope style={{ width: '16px', height: '16px', color: 'var(--primary-500)' }} />
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+              {symptoms.map((symptom) => (
+                <Badge key={symptom.id} variant="outline" size="sm">
+                  {symptom.name}
+                </Badge>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Doctor */}
+        {doctor && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <User style={{ width: '16px', height: '16px', color: 'var(--primary-500)' }} />
+            <span style={{ fontWeight: 500, color: 'var(--gray-900)', fontSize: '15px', whiteSpace: 'nowrap' }}>
+              {doctor.name} {doctor.title}
+            </span>
+          </div>
+        )}
+
+        {/* Date */}
+        {date && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Calendar style={{ width: '16px', height: '16px', color: 'var(--primary-500)' }} />
+            <span style={{ fontWeight: 500, color: 'var(--gray-900)', fontSize: '15px', whiteSpace: 'nowrap' }}>
+              {formatDate(new Date(date))}
+            </span>
+          </div>
+        )}
+
+        {/* Time */}
+        {time && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Clock style={{ width: '16px', height: '16px', color: 'var(--primary-500)' }} />
+            <span style={{ fontWeight: 500, color: 'var(--gray-900)', fontSize: '15px' }}>{time}</span>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // 기본 모드: 세로로 표시
   return (
-    <Card className="bg-[var(--gray-50)]">
-      <h3 className="text-lg font-semibold text-[var(--gray-900)] mb-4">
+    <div
+      style={{
+        backgroundColor: 'var(--gray-50)',
+        borderRadius: '16px',
+        padding: '24px',
+        border: '1px solid var(--gray-200)'
+      }}
+    >
+      <h3 style={{
+        fontSize: '18px',
+        fontWeight: 600,
+        color: 'var(--gray-900)',
+        marginBottom: '20px'
+      }}>
         예약 정보 확인
       </h3>
 
-      <div className="space-y-4">
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
         {/* Symptoms */}
         {symptoms.length > 0 && (
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 bg-[var(--primary-50)] rounded-lg flex items-center justify-center flex-shrink-0">
-              <Stethoscope className="w-5 h-5 text-[var(--primary-500)]" />
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              backgroundColor: 'var(--primary-50)',
+              borderRadius: '10px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}>
+              <Stethoscope style={{ width: '20px', height: '20px', color: 'var(--primary-500)' }} />
             </div>
             <div>
-              <p className="text-sm text-[var(--gray-500)]">선택 증상</p>
-              <div className="flex flex-wrap gap-1 mt-1">
+              <p style={{ fontSize: '14px', color: 'var(--gray-500)', marginBottom: '6px' }}>선택 증상</p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                 {symptoms.map((symptom) => (
                   <Badge key={symptom.id} variant="outline" size="sm">
                     {symptom.name}
@@ -41,13 +133,22 @@ export function BookingSummary({ symptoms, doctor, date, time }: BookingSummaryP
 
         {/* Doctor */}
         {doctor && (
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 bg-[var(--primary-50)] rounded-lg flex items-center justify-center flex-shrink-0">
-              <User className="w-5 h-5 text-[var(--primary-500)]" />
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              backgroundColor: 'var(--primary-50)',
+              borderRadius: '10px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}>
+              <User style={{ width: '20px', height: '20px', color: 'var(--primary-500)' }} />
             </div>
             <div>
-              <p className="text-sm text-[var(--gray-500)]">담당 의료진</p>
-              <p className="font-medium text-[var(--gray-900)]">
+              <p style={{ fontSize: '14px', color: 'var(--gray-500)', marginBottom: '4px' }}>담당 의료진</p>
+              <p style={{ fontWeight: 500, fontSize: '15px', color: 'var(--gray-900)', whiteSpace: 'nowrap' }}>
                 {doctor.name} {doctor.title}
               </p>
             </div>
@@ -56,13 +157,22 @@ export function BookingSummary({ symptoms, doctor, date, time }: BookingSummaryP
 
         {/* Date */}
         {date && (
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 bg-[var(--primary-50)] rounded-lg flex items-center justify-center flex-shrink-0">
-              <Calendar className="w-5 h-5 text-[var(--primary-500)]" />
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              backgroundColor: 'var(--primary-50)',
+              borderRadius: '10px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}>
+              <Calendar style={{ width: '20px', height: '20px', color: 'var(--primary-500)' }} />
             </div>
             <div>
-              <p className="text-sm text-[var(--gray-500)]">예약 날짜</p>
-              <p className="font-medium text-[var(--gray-900)]">
+              <p style={{ fontSize: '14px', color: 'var(--gray-500)', marginBottom: '4px' }}>예약 날짜</p>
+              <p style={{ fontWeight: 500, fontSize: '15px', color: 'var(--gray-900)' }}>
                 {formatDate(new Date(date))}
               </p>
             </div>
@@ -71,17 +181,33 @@ export function BookingSummary({ symptoms, doctor, date, time }: BookingSummaryP
 
         {/* Time */}
         {time && (
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 bg-[var(--primary-50)] rounded-lg flex items-center justify-center flex-shrink-0">
-              <Clock className="w-5 h-5 text-[var(--primary-500)]" />
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+            <div style={{
+              width: '40px',
+              height: '40px',
+              backgroundColor: 'var(--primary-50)',
+              borderRadius: '10px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexShrink: 0
+            }}>
+              <Clock style={{ width: '20px', height: '20px', color: 'var(--primary-500)' }} />
             </div>
             <div>
-              <p className="text-sm text-[var(--gray-500)]">예약 시간</p>
-              <p className="font-medium text-[var(--gray-900)]">{time}</p>
+              <p style={{ fontSize: '14px', color: 'var(--gray-500)', marginBottom: '4px' }}>예약 시간</p>
+              <p style={{ fontWeight: 500, fontSize: '15px', color: 'var(--gray-900)' }}>{time}</p>
             </div>
           </div>
         )}
+
+        {/* Empty state */}
+        {symptoms.length === 0 && !doctor && !date && !time && (
+          <p style={{ color: 'var(--gray-400)', fontSize: '14px', textAlign: 'center', padding: '16px 0' }}>
+            예약 정보가 없습니다
+          </p>
+        )}
       </div>
-    </Card>
+    </div>
   );
 }

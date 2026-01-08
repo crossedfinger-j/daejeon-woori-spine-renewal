@@ -1,6 +1,6 @@
 "use client";
 
-import { HTMLAttributes, forwardRef } from "react";
+import { HTMLAttributes, forwardRef, CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 
 export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
@@ -8,8 +8,15 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
   size?: "sm" | "md" | "lg";
 }
 
+// 인라인 스타일로 패딩 적용
+const sizeStyles: Record<string, CSSProperties> = {
+  sm: { padding: '6px 16px', fontSize: '14px' },
+  md: { padding: '8px 20px', fontSize: '16px' },
+  lg: { padding: '10px 24px', fontSize: '18px' },
+};
+
 const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
-  ({ className, variant = "default", size = "md", ...props }, ref) => {
+  ({ className, variant = "default", size = "md", style, ...props }, ref) => {
     const baseStyles =
       "inline-flex items-center justify-center font-medium rounded-full";
 
@@ -22,17 +29,11 @@ const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
       outline: "bg-white border border-[var(--gray-300)] text-[var(--gray-600)]",
     };
 
-    // Silver-Friendly: 가독성을 위한 충분한 패딩 (글자와 상자 간격)
-    const sizes = {
-      sm: "px-3.5 py-1.5 text-sm",
-      md: "px-4 py-2 text-base",
-      lg: "px-5 py-2.5 text-lg",
-    };
-
     return (
       <span
         ref={ref}
-        className={cn(baseStyles, variants[variant], sizes[size], className)}
+        className={cn(baseStyles, variants[variant], className)}
+        style={{ ...sizeStyles[size], ...style }}
         {...props}
       />
     );

@@ -2,12 +2,14 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowRight, GraduationCap, X, Clock } from "lucide-react";
 import { doctors } from "@/data";
 import { Button, Badge } from "@/components/ui";
+import { useBookingStore } from "@/stores/bookingStore";
 
 // 진료시간표 모달 컴포넌트
-function ScheduleModal({ doctor, onClose }: { doctor: typeof doctors[0]; onClose: () => void }) {
+function ScheduleModal({ doctor, onClose, onBooking }: { doctor: typeof doctors[0]; onClose: () => void; onBooking: () => void }) {
   const schedule = [
     { day: "월요일", am: "09:00-12:30", pm: "14:00-18:00" },
     { day: "화요일", am: "09:00-12:30", pm: "14:00-18:00" },
@@ -18,42 +20,101 @@ function ScheduleModal({ doctor, onClose }: { doctor: typeof doctors[0]; onClose
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-6">
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      zIndex: 9999,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '24px'
+    }}>
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)'
+        }}
+        onClick={onClose}
+      />
 
-      {/* Modal - 여유있는 패딩 */}
-      <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md animate-slide-up">
-        {/* Header - p-7 이상 */}
-        <div className="flex items-center justify-between px-8 py-7 border-b border-[var(--slate-100)]">
+      {/* Modal */}
+      <div style={{
+        position: 'relative',
+        backgroundColor: 'white',
+        borderRadius: '24px',
+        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+        width: '100%',
+        maxWidth: '420px',
+        maxHeight: '90vh',
+        overflow: 'auto'
+      }}>
+        {/* Header */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          padding: '24px 28px',
+          borderBottom: '1px solid var(--gray-100)'
+        }}>
           <div>
-            <h3 className="text-2xl font-bold text-[var(--gray-900)]">{doctor.name} 원장님</h3>
-            <p className="text-lg text-[var(--gray-500)] mt-2">주간 진료 시간표</p>
+            <h3 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--gray-900)' }}>
+              {doctor.name} 원장님
+            </h3>
+            <p style={{ fontSize: '16px', color: 'var(--gray-500)', marginTop: '6px' }}>
+              주간 진료 시간표
+            </p>
           </div>
           <button
             onClick={onClose}
-            className="w-12 h-12 flex items-center justify-center rounded-full hover:bg-[var(--slate-100)] transition-colors"
+            style={{
+              width: '44px',
+              height: '44px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '50%',
+              border: 'none',
+              backgroundColor: 'transparent',
+              cursor: 'pointer',
+              transition: 'background-color 0.2s'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--gray-100)'}
+            onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           >
-            <X className="w-6 h-6 text-[var(--gray-500)]" />
+            <X style={{ width: '24px', height: '24px', color: 'var(--gray-500)' }} />
           </button>
         </div>
 
-        {/* Schedule Table - p-8 */}
-        <div className="px-8 py-7">
-          <table className="w-full">
+        {/* Schedule Table */}
+        <div style={{ padding: '24px 28px' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
-              <tr className="text-lg text-[var(--gray-500)]">
-                <th className="text-left py-4 font-medium">요일</th>
-                <th className="text-center py-4 font-medium">오전</th>
-                <th className="text-center py-4 font-medium">오후</th>
+              <tr>
+                <th style={{ textAlign: 'left', padding: '12px 0', fontSize: '15px', fontWeight: 500, color: 'var(--gray-500)' }}>요일</th>
+                <th style={{ textAlign: 'center', padding: '12px 0', fontSize: '15px', fontWeight: 500, color: 'var(--gray-500)' }}>오전</th>
+                <th style={{ textAlign: 'center', padding: '12px 0', fontSize: '15px', fontWeight: 500, color: 'var(--gray-500)' }}>오후</th>
               </tr>
             </thead>
             <tbody>
               {schedule.map((item) => (
-                <tr key={item.day} className="border-t border-[var(--slate-100)]">
-                  <td className="py-5 text-lg font-medium text-[var(--gray-900)]">{item.day}</td>
-                  <td className="py-5 text-lg text-center text-[var(--gray-600)]">{item.am}</td>
-                  <td className={`py-5 text-lg text-center ${item.pm === '휴진' ? 'text-[var(--error-500)] font-medium' : 'text-[var(--gray-600)]'}`}>
+                <tr key={item.day} style={{ borderTop: '1px solid var(--gray-100)' }}>
+                  <td style={{ padding: '14px 0', fontSize: '16px', fontWeight: 500, color: 'var(--gray-900)' }}>{item.day}</td>
+                  <td style={{ padding: '14px 0', fontSize: '16px', textAlign: 'center', color: 'var(--gray-600)' }}>{item.am}</td>
+                  <td style={{
+                    padding: '14px 0',
+                    fontSize: '16px',
+                    textAlign: 'center',
+                    color: item.pm === '휴진' ? 'var(--error-500)' : 'var(--gray-600)',
+                    fontWeight: item.pm === '휴진' ? 500 : 400
+                  }}>
                     {item.pm}
                   </td>
                 </tr>
@@ -61,18 +122,30 @@ function ScheduleModal({ doctor, onClose }: { doctor: typeof doctors[0]; onClose
             </tbody>
           </table>
 
-          <p className="mt-6 text-base text-[var(--gray-500)] text-center">
-            * 점심시간: 12:30 - 14:00 | 진료 일정은 변경될 수 있습니다
+          <p style={{
+            marginTop: '20px',
+            fontSize: '14px',
+            color: 'var(--gray-500)',
+            textAlign: 'center',
+            lineHeight: 1.6
+          }}>
+            <span style={{ whiteSpace: 'nowrap' }}>* 점심시간: 12:30 - 14:00</span>
+            <span style={{ margin: '0 8px', color: 'var(--gray-300)' }}>|</span>
+            <span style={{ whiteSpace: 'nowrap' }}>진료 일정은 변경될 수 있습니다</span>
           </p>
         </div>
 
-        {/* Footer - p-8 */}
-        <div className="px-8 py-7 border-t border-[var(--slate-100)] bg-[var(--slate-50)] rounded-b-3xl">
-          <Link href="/booking">
-            <Button variant="cta" size="lg" className="w-full">
-              예약하기
-            </Button>
-          </Link>
+        {/* Footer */}
+        <div style={{
+          padding: '20px 28px',
+          borderTop: '1px solid var(--gray-100)',
+          backgroundColor: 'var(--gray-50)',
+          borderBottomLeftRadius: '24px',
+          borderBottomRightRadius: '24px'
+        }}>
+          <Button variant="cta" size="lg" style={{ width: '100%' }} onClick={onBooking}>
+            예약하기
+          </Button>
         </div>
       </div>
     </div>
@@ -81,80 +154,97 @@ function ScheduleModal({ doctor, onClose }: { doctor: typeof doctors[0]; onClose
 
 export function DoctorHighlight() {
   const [selectedDoctor, setSelectedDoctor] = useState<typeof doctors[0] | null>(null);
+  const router = useRouter();
+  const { setDoctor, setStep, resetBooking } = useBookingStore();
 
   // 병원장 및 과장급 의료진 표시
   const highlightedDoctors = doctors.filter((doc) =>
     doc.title.includes("병원장") || doc.title.includes("과장")
   ).slice(0, 3);
 
+  const handleBookingWithDoctor = () => {
+    if (selectedDoctor) {
+      // 예약 상태 초기화 후 해당 의료진만 선택하고 증상 선택 페이지로 이동
+      resetBooking();
+      setDoctor(selectedDoctor);
+      setStep(1);
+      router.push("/booking/symptom");
+    }
+  };
+
   return (
-    // 섹션 간격 py-32 (128px)
-    <section className="py-28 lg:py-36 bg-white">
-      <div style={{ maxWidth: '80rem', marginLeft: 'auto', marginRight: 'auto' }} className="px-8 lg:px-12">
-        {/* 헤더 영역 간격 - mb-16 (64px) */}
-        <div className="text-center mb-16 lg:mb-20">
-          <h2 className="text-4xl lg:text-5xl font-bold text-[var(--gray-900)] mb-6">
+    // 섹션 간격 확장 - Silver-Friendly
+    <section className="py-20 lg:py-32 bg-white">
+      <div style={{ maxWidth: '80rem', marginLeft: 'auto', marginRight: 'auto', padding: '40px 24px' }} className="lg:px-12">
+        {/* 헤더 영역 간격 확장 */}
+        <div className="text-center mb-14 lg:mb-20">
+          <h2 className="text-4xl lg:text-5xl font-bold text-[var(--gray-900)] mb-8 lg:mb-10" style={{ lineHeight: '1.3' }}>
             전문 의료진 소개
           </h2>
-          <p className="text-xl text-[var(--gray-600)] max-w-2xl mx-auto leading-relaxed">
+          <p className="text-xl lg:text-2xl text-[var(--gray-600)] max-w-2xl mx-auto" style={{ lineHeight: '1.8' }}>
             풍부한 경험과 전문성을 갖춘 의료진이 여러분을 기다립니다
           </p>
         </div>
 
-        {/* 카드 그리드 - gap-8 (32px) */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+        {/* 카드 그리드 */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {highlightedDoctors.map((doctor) => (
-            // 흰색 배경 + border-slate-100 + shadow-lg
             <div key={doctor.id} className="bg-white rounded-3xl border border-[var(--slate-100)] shadow-lg shadow-slate-200/50 hover:shadow-xl hover:shadow-slate-300/50 transition-all duration-300 overflow-hidden hover:-translate-y-2">
-              {/* Profile Image Area */}
-              <div className="relative aspect-[4/3] bg-gradient-to-br from-[var(--slate-100)] to-[var(--slate-50)] flex items-center justify-center">
-                <div className="w-28 h-28 bg-[var(--primary-100)] rounded-full flex items-center justify-center">
-                  <span className="text-6xl">👨‍⚕️</span>
+              {/* Profile Image Area - 더 컴팩트하게 */}
+              <div className="relative bg-gradient-to-br from-[var(--slate-50)] to-[var(--slate-100)] flex items-center justify-center" style={{ padding: '32px 24px' }}>
+                <div className="w-24 h-24 bg-[var(--primary-100)] rounded-full flex items-center justify-center">
+                  <span className="text-5xl">👨‍⚕️</span>
                 </div>
                 {/* Title Badge */}
-                <div className="absolute top-6 right-6">
-                  <Badge variant="primary" size="lg">
+                <div className="absolute top-4 right-4">
+                  <Badge variant="primary" size="sm">
                     {doctor.title}
                   </Badge>
                 </div>
               </div>
 
-              {/* Content - p-8 최소 패딩 */}
-              <div className="p-7 lg:p-8">
-                {/* Name */}
-                <h3 className="text-2xl font-bold text-[var(--gray-900)] mb-5">
-                  {doctor.name}
-                  <span className="text-[var(--gray-500)] font-normal text-xl ml-2">원장</span>
-                </h3>
+              {/* Content */}
+              <div style={{ padding: '24px' }}>
+                {/* Name & Title */}
+                <div style={{ marginBottom: '16px', textAlign: 'center' }}>
+                  <h3 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--gray-900)', marginBottom: '4px', whiteSpace: 'nowrap' }}>
+                    {doctor.name}
+                    <span style={{ fontWeight: 400, fontSize: '16px', color: 'var(--gray-500)', marginLeft: '6px' }}>원장</span>
+                  </h3>
+                </div>
 
-                {/* Specialties - 간격 확대 */}
-                <div className="flex flex-wrap gap-2.5 mb-6">
+                {/* Specialties - 중앙 정렬 */}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', justifyContent: 'center', marginBottom: '16px' }}>
                   {doctor.specialty.slice(0, 2).map((spec, index) => (
-                    <Badge key={index} variant="outline" size="md">
+                    <Badge key={index} variant="outline" size="sm">
                       {spec}
                     </Badge>
                   ))}
                 </div>
 
-                {/* Key Info - space-x-4 아이콘-텍스트 간격 */}
-                <div className="flex items-start gap-4 text-[var(--gray-600)] mb-8">
-                  <GraduationCap className="w-6 h-6 text-[var(--primary-500)] flex-shrink-0 mt-0.5" />
-                  <span className="text-lg leading-relaxed line-clamp-2">{doctor.career[0]}</span>
+                {/* Key Info - 컴팩트하게 */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 16px', backgroundColor: 'var(--slate-50)', borderRadius: '12px', marginBottom: '20px' }}>
+                  <GraduationCap style={{ width: '18px', height: '18px', color: 'var(--primary-500)', flexShrink: 0 }} />
+                  <span style={{ fontSize: '14px', color: 'var(--gray-600)', lineHeight: '1.5', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{doctor.career[0]}</span>
                 </div>
 
-                {/* Actions - h-14 (56px) 터치 타겟 */}
-                <div className="flex gap-4">
+                {/* Actions - 세련된 버튼 */}
+                <div style={{ display: 'flex', gap: '8px' }}>
                   <button
                     onClick={() => setSelectedDoctor(doctor)}
-                    className="flex-1 flex items-center justify-center gap-3 h-14 px-5 rounded-2xl border-2 border-[var(--slate-200)] text-lg font-medium text-[var(--gray-700)] hover:bg-[var(--slate-50)] hover:border-[var(--slate-300)] transition-all duration-300"
+                    style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '10px 12px', borderRadius: '10px', border: '1px solid var(--slate-200)', backgroundColor: 'white', fontSize: '14px', fontWeight: 500, color: 'var(--gray-600)', cursor: 'pointer', transition: 'all 0.2s' }}
+                    className="hover:bg-[var(--slate-50)] hover:border-[var(--slate-300)]"
                   >
-                    <Clock className="w-5 h-5" />
-                    진료시간표
+                    <Clock style={{ width: '16px', height: '16px' }} />
+                    진료시간
                   </button>
-                  <Link href={`/doctors/${doctor.id}`} className="flex-1">
-                    <button className="w-full flex items-center justify-center gap-3 h-14 px-5 rounded-2xl bg-[var(--primary-500)] text-lg font-medium text-white hover:bg-[var(--primary-600)] transition-all duration-300 shadow-md hover:shadow-lg">
-                      자세히 보기
-                      <ArrowRight className="w-5 h-5" />
+                  <Link href={`/doctors/${doctor.id}`} style={{ flex: 1 }}>
+                    <button
+                      style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', padding: '10px 12px', borderRadius: '10px', backgroundColor: 'var(--primary-500)', fontSize: '14px', fontWeight: 500, color: 'white', border: 'none', cursor: 'pointer', transition: 'all 0.2s' }}
+                      className="hover:bg-[var(--primary-600)]"
+                    >
+                      자세히
+                      <ArrowRight style={{ width: '16px', height: '16px' }} />
                     </button>
                   </Link>
                 </div>
@@ -163,8 +253,8 @@ export function DoctorHighlight() {
           ))}
         </div>
 
-        {/* 하단 버튼 - mt-16 (64px) */}
-        <div className="mt-16 lg:mt-20 text-center">
+        {/* 하단 버튼 - 카드와 충분한 간격 */}
+        <div style={{ marginTop: '56px', textAlign: 'center' }}>
           <Link href="/doctors">
             <Button variant="secondary" size="lg" rightIcon={<ArrowRight className="w-6 h-6" />}>
               전체 의료진 보기
@@ -175,7 +265,11 @@ export function DoctorHighlight() {
 
       {/* Schedule Modal */}
       {selectedDoctor && (
-        <ScheduleModal doctor={selectedDoctor} onClose={() => setSelectedDoctor(null)} />
+        <ScheduleModal
+          doctor={selectedDoctor}
+          onClose={() => setSelectedDoctor(null)}
+          onBooking={handleBookingWithDoctor}
+        />
       )}
     </section>
   );

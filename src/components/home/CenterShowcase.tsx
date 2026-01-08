@@ -25,50 +25,48 @@ const colorMap: Record<string, { bg: string; icon: string }> = {
 
 export function CenterShowcase() {
   return (
-    // 섹션 간격 py-32 (128px) 적용
-    <section className="py-28 lg:py-36 bg-[var(--slate-50)]">
-      <div style={{ maxWidth: '80rem', marginLeft: 'auto', marginRight: 'auto' }} className="px-8 lg:px-12">
-        {/* 헤더 영역 간격 - mb-16 (64px) */}
-        <div className="text-center mb-16 lg:mb-20">
-          <h2 className="text-4xl lg:text-5xl font-bold text-[var(--gray-900)] mb-6">
+    <section style={{ padding: '32px 0', backgroundColor: 'var(--slate-50)' }}>
+      <div style={{ maxWidth: '80rem', marginLeft: 'auto', marginRight: 'auto', padding: '0 24px' }}>
+        {/* 헤더 영역 */}
+        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+          <h2 style={{ fontSize: '24px', fontWeight: 700, color: 'var(--gray-900)', marginBottom: '8px' }}>
             전문 센터 안내
           </h2>
-          <p className="text-xl text-[var(--gray-600)] max-w-2xl mx-auto leading-relaxed">
+          <p style={{ fontSize: '15px', color: 'var(--gray-600)', maxWidth: '500px', margin: '0 auto' }}>
             각 분야 최고의 전문의가 환자분께 최적의 치료를 제공합니다
           </p>
         </div>
 
-        {/* 카드 그리드 - gap-8 (32px) */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+        {/* 카드 그리드 */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {centers.map((center) => {
             const colors = colorMap[center.slug] || colorMap.spine;
             return (
               <Link key={center.id} href={`/centers/${center.slug}`}>
-                {/* 흰색 배경 + border-slate-100 + shadow-lg */}
                 <div className="group h-full bg-white rounded-3xl border border-[var(--slate-100)] shadow-lg shadow-slate-200/50 hover:shadow-xl hover:shadow-slate-300/50 hover:border-[var(--slate-200)] transition-all duration-300 overflow-hidden hover:-translate-y-2">
-                  {/* Header - p-8 최소 패딩 */}
-                  <div className={`${colors.bg} p-7 lg:p-8 text-white`}>
-                    <div className="flex items-center justify-between mb-5">
-                      <div className={`w-16 h-16 ${colors.icon} rounded-2xl flex items-center justify-center`}>
+                  {/* Header - 컴팩트하게 */}
+                  <div className={`${colors.bg} text-white`} style={{ padding: '20px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '14px' }}>
+                      <div className={`${colors.icon} rounded-xl flex items-center justify-center`} style={{ width: '44px', height: '44px' }}>
                         {iconMap[center.icon]}
                       </div>
-                      <ArrowRight className="w-6 h-6 opacity-60 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                      <ArrowRight style={{ width: '20px', height: '20px', opacity: 0.6 }} className="group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                     </div>
-                    <h3 className="text-2xl font-bold mb-3">{center.name}</h3>
-                    <p className="text-white/80 text-lg leading-relaxed line-clamp-2">{center.description}</p>
+                    <h3 style={{ fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>{center.name}</h3>
+                    <p style={{ fontSize: '14px', opacity: 0.85, lineHeight: '1.5', overflow: 'hidden', textOverflow: 'ellipsis', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>{center.description}</p>
                   </div>
 
-                  {/* Content - p-8 최소 패딩 */}
-                  <div className="p-7 lg:p-8">
-                    <p className="text-sm font-semibold text-[var(--gray-500)] uppercase tracking-wider mb-5">주요 치료</p>
-                    <div className="flex flex-wrap gap-2.5">
+                  {/* Content */}
+                  <div style={{ padding: '16px 20px 20px 20px' }}>
+                    <p style={{ fontSize: '12px', fontWeight: 600, color: 'var(--gray-500)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '12px' }}>주요 치료</p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                       {center.treatments.slice(0, 3).map((treatment) => (
-                        <Badge key={treatment.id} variant="outline" size="md">
+                        <Badge key={treatment.id} variant="outline" size="sm">
                           {treatment.name}
                         </Badge>
                       ))}
                       {center.treatments.length > 3 && (
-                        <Badge variant="default" size="md">
+                        <Badge variant="default" size="sm">
                           +{center.treatments.length - 3}
                         </Badge>
                       )}
@@ -80,14 +78,15 @@ export function CenterShowcase() {
           })}
         </div>
 
-        {/* 하단 링크 - mt-16 (64px) */}
-        <div className="mt-16 lg:mt-20 text-center">
+        {/* 하단 버튼 */}
+        <div style={{ marginTop: '24px', textAlign: 'center' }}>
           <Link
             href="/centers"
-            className="inline-flex items-center gap-3 text-[var(--primary-500)] font-semibold text-xl hover:text-[var(--primary-600)] transition-colors group"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', fontSize: '14px', fontWeight: 600, color: 'var(--primary-500)', transition: 'color 0.2s' }}
+            className="hover:text-[var(--primary-600)] group"
           >
             <span>모든 센터 보기</span>
-            <ArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight style={{ width: '16px', height: '16px' }} className="group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { forwardRef, HTMLAttributes } from "react";
+import { forwardRef, HTMLAttributes, CSSProperties } from "react";
 import { cn } from "@/lib/utils";
 
 export interface CardProps extends HTMLAttributes<HTMLDivElement> {
@@ -8,8 +8,17 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
   padding?: "none" | "sm" | "md" | "lg" | "xl";
 }
 
+// 인라인 스타일로 패딩 적용 (적절한 여백)
+const paddingStyles: Record<string, CSSProperties> = {
+  none: {},
+  sm: { padding: '16px' },
+  md: { padding: '20px' },
+  lg: { padding: '24px' },
+  xl: { padding: '32px' },
+};
+
 const Card = forwardRef<HTMLDivElement, CardProps>(
-  ({ className, variant = "default", padding = "lg", children, ...props }, ref) => {
+  ({ className, variant = "default", padding = "lg", children, style, ...props }, ref) => {
     // 현대적 스타일: 흰색 배경 + slate 보더 + lg 그림자
     const baseStyles = "rounded-3xl bg-white overflow-hidden";
 
@@ -24,19 +33,11 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
         "border border-[var(--slate-100)] shadow-xl shadow-slate-300/40 hover:shadow-2xl transition-all duration-300",
     };
 
-    // Silver-Friendly: 최소 p-8 (32px) 이상 보장
-    const paddings = {
-      none: "",
-      sm: "p-6",           // 24px
-      md: "p-8",           // 32px - 최소 기본값
-      lg: "p-10",          // 40px
-      xl: "p-12",          // 48px
-    };
-
     return (
       <div
         ref={ref}
-        className={cn(baseStyles, variants[variant], paddings[padding], className)}
+        className={cn(baseStyles, variants[variant], className)}
+        style={{ ...paddingStyles[padding], ...style }}
         {...props}
       >
         {children}
@@ -48,8 +49,8 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
 Card.displayName = "Card";
 
 const CardHeader = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
-    <div ref={ref} className={cn("mb-6", className)} {...props} />
+  ({ className, style, ...props }, ref) => (
+    <div ref={ref} className={cn("", className)} style={{ marginBottom: '16px', ...style }} {...props} />
   )
 );
 
@@ -70,10 +71,11 @@ CardTitle.displayName = "CardTitle";
 const CardDescription = forwardRef<
   HTMLParagraphElement,
   HTMLAttributes<HTMLParagraphElement>
->(({ className, ...props }, ref) => (
+>(({ className, style, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-lg text-[var(--gray-600)] mt-3 leading-relaxed", className)}
+    className={cn("text-lg text-[var(--gray-600)] leading-relaxed", className)}
+    style={{ marginTop: '12px', ...style }}
     {...props}
   />
 ));
@@ -89,10 +91,11 @@ const CardContent = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
 CardContent.displayName = "CardContent";
 
 const CardFooter = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
-  ({ className, ...props }, ref) => (
+  ({ className, style, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn("mt-8 flex items-center gap-5", className)}
+      className={cn("flex items-center", className)}
+      style={{ marginTop: '20px', gap: '16px', ...style }}
       {...props}
     />
   )

@@ -69,19 +69,20 @@ export function StickyActionBar() {
       </div>
 
       {/* Desktop - Fixed Right Floating */}
-      <div className="hidden lg:flex fixed right-6 bottom-6 z-50 flex-col gap-3">
+      <div className="hidden lg:flex fixed right-6 bottom-6 z-50 flex-col" style={{ gap: '12px' }}>
         {actions.map((action, index) => {
           const Icon = action.icon;
           const className = cn(
-            "flex items-center gap-3 px-5 py-3 rounded-full shadow-lg transition-all",
+            "flex items-center rounded-full shadow-lg transition-all text-base font-medium",
             action.color,
             action.hoverColor,
             "hover:shadow-xl hover:scale-105"
           );
+          const buttonStyle = { padding: '10px 20px', gap: '8px' };
 
           if (action.isLink) {
             return (
-              <Link key={index} href={action.href} className={className}>
+              <Link key={index} href={action.href} className={className} style={buttonStyle}>
                 <Icon className="w-5 h-5" />
                 <span className="font-medium">{action.label}</span>
               </Link>
@@ -95,6 +96,7 @@ export function StickyActionBar() {
               target={action.href.startsWith("http") ? "_blank" : undefined}
               rel={action.href.startsWith("http") ? "noopener noreferrer" : undefined}
               className={className}
+              style={buttonStyle}
             >
               <Icon className="w-5 h-5" />
               <span className="font-medium">{action.label}</span>

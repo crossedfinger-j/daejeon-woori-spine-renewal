@@ -4,7 +4,11 @@
       "Bash(npx create-next-app@latest:*)",
       "Bash(powershell -Command:*)",
       "Bash(npm install:*)",
-      "Bash(npm run build:*)"
+      "Bash(npm run build:*)",
+      "Bash(dir /s /b \"c:\\\\Users\\\\leeji\\\\Documents\\\\daejeon-woori-spine-renewal\\\\src\\\\app\\\\*\\\\page.tsx\")",
+      "Bash(Get-ChildItem -Path \"c:\\\\Users\\\\leeji\\\\Documents\\\\daejeon-woori-spine-renewal\\\\src\\\\app\" -Recurse -Filter \"page.tsx\")",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(move:*)"
     ]
   }
 }

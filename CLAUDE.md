@@ -8,9 +8,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Tech Stack
 
-- **Framework**: Next.js 14 (App Router)
+- **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS, tailwind-merge, clsx
+- **Styling**: Tailwind CSS v4 (CSS-based config in globals.css), tailwind-merge, clsx
 - **UI**: Lucide React (icons), Framer Motion (animations), Radix UI (headless components)
 - **State**: Zustand (global state), React Hook Form + Zod (forms)
 
@@ -59,19 +59,23 @@ lib/                 # Utilities (cn function, validation)
 
 **Booking Flow State**: Uses Zustand store (`bookingStore.ts`) to persist user selections across 4 booking steps:
 1. Symptom selection (body part → symptoms)
-2. Doctor matching (auto-recommend based on symptoms)
-3. Schedule selection (calendar + time slots)
-4. Confirmation (patient info form)
+2. Doctor matching (auto-recommend based on symptoms via `getDoctorsBySymptoms()`)
+3. Schedule selection (calendar + time slots generated deterministically to avoid SSR hydration issues)
+4. Confirmation (patient info form with Zod validation)
 
-**Design System**: Tailwind config extends with custom tokens for Silver-Friendly design:
-- Min font size: 16px, touch targets: 44px minimum
-- Primary color scale: #3DA1E3 (blue medical theme)
-- WCAG AA contrast compliance
+**Design System**: Defined in `globals.css` using CSS custom properties and Tailwind v4's `@theme inline` directive:
+- Primary colors: Deep Navy palette (#1E3A5F base)
+- Center-specific theme colors for 5 specialty centers
+- Generous spacing system (section padding 8-10rem, card padding 2rem+)
+- Typography: Pretendard font, min 16px base, text-lg default for body
 
-**Component Composition**: UI components use `cn()` utility (clsx + tailwind-merge) for class merging.
+**Component Composition**: UI components use `cn()` utility from `lib/utils.ts` (clsx + tailwind-merge) for class merging.
+
+**Data Layer**: Mock data in `src/data/` with helper functions (e.g., `getDoctorById`, `getDoctorsByCenter`, `getDoctorsBySymptoms`).
 
 ## Design Constraints
 
-- **Accessibility**: Min 48px button height, 44px touch targets, high contrast colors
+- **Accessibility**: Min 48px button height, 56px touch targets (`.touch-target` class), high contrast colors, 3px focus outlines
 - **Responsive**: Mobile-first, breakpoints at 640/768/1024/1280px
 - **Sticky Action Bar**: Always visible bottom bar with KakaoTalk, Phone, Booking CTAs
+- **Safe Area**: Bottom padding for iOS notch (`env(safe-area-inset-bottom)`)

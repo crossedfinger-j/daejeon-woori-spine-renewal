@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Header, Footer, StickyActionBar, FloatingActionButton } from "@/components/layout";
+import { Header, Footer, FloatingActionButton } from "@/components/layout";
 
 export const metadata: Metadata = {
   title: "대전우리병원 | 척추·관절 전문",
@@ -39,7 +39,6 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
-        <StickyActionBar />
         <FloatingActionButton />
       </body>
     </html>

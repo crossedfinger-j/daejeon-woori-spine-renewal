@@ -1,8 +1,7 @@
 "use client";
 
 import { Doctor } from "@/types";
-import { Card, CardContent, Badge, Button } from "@/components/ui";
-import { cn } from "@/lib/utils";
+import { Badge, Button } from "@/components/ui";
 
 interface DoctorCardProps {
   doctor: Doctor;
@@ -13,31 +12,55 @@ interface DoctorCardProps {
 
 export function DoctorCard({ doctor, isSelected, onSelect, recommended }: DoctorCardProps) {
   return (
-    <Card
-      variant="interactive"
-      padding="none"
-      className={cn(
-        "relative overflow-hidden transition-all duration-200",
-        isSelected && "ring-2 ring-[var(--primary-500)]"
-      )}
+    <div
+      style={{
+        position: 'relative',
+        overflow: 'hidden',
+        backgroundColor: 'white',
+        borderRadius: '16px',
+        border: isSelected ? '2px solid var(--primary-500)' : '1px solid var(--gray-200)',
+        boxShadow: isSelected ? '0 4px 12px rgba(61, 161, 227, 0.15)' : '0 1px 3px rgba(0,0,0,0.05)',
+        transition: 'all 0.2s',
+        cursor: 'pointer'
+      }}
+      onClick={onSelect}
     >
       {recommended && (
-        <div className="absolute top-0 right-0 bg-[var(--primary-500)] text-white text-xs font-medium px-3 py-1 rounded-bl-lg">
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          backgroundColor: 'var(--primary-500)',
+          color: 'white',
+          fontSize: '12px',
+          fontWeight: 600,
+          padding: '6px 12px',
+          borderBottomRightRadius: '12px'
+        }}>
           추천
         </div>
       )}
 
-      <div className="p-6">
-        <div className="flex gap-4">
+      <div style={{ padding: '20px' }}>
+        <div style={{ display: 'flex', gap: '16px' }}>
           {/* Profile Image */}
-          <div className="w-20 h-20 bg-gradient-to-br from-[var(--gray-100)] to-[var(--gray-200)] rounded-xl flex items-center justify-center flex-shrink-0">
-            <span className="text-3xl">👨‍⚕️</span>
+          <div style={{
+            width: '64px',
+            height: '64px',
+            background: 'linear-gradient(135deg, var(--gray-100), var(--gray-200))',
+            borderRadius: '12px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0
+          }}>
+            <span style={{ fontSize: '28px' }}>👨‍⚕️</span>
           </div>
 
           {/* Info */}
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
-              <h3 className="text-xl font-bold text-[var(--gray-900)]">
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', flexWrap: 'wrap' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--gray-900)', whiteSpace: 'nowrap' }}>
                 {doctor.name}
               </h3>
               <Badge variant="primary" size="sm">
@@ -45,30 +68,33 @@ export function DoctorCard({ doctor, isSelected, onSelect, recommended }: Doctor
               </Badge>
             </div>
 
-            <div className="flex flex-wrap gap-1 mb-2">
-              {doctor.specialty.map((spec, index) => (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px', marginBottom: '8px' }}>
+              {doctor.specialty.slice(0, 3).map((spec, index) => (
                 <Badge key={index} variant="outline" size="sm">
                   {spec}
                 </Badge>
               ))}
             </div>
 
-            <p className="text-sm text-[var(--gray-600)] line-clamp-2">
+            <p style={{ fontSize: '14px', color: 'var(--gray-600)', lineHeight: '1.5', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {doctor.career[0]}
             </p>
           </div>
         </div>
 
-        <div className="mt-4 pt-4 border-t border-[var(--gray-100)]">
+        <div style={{ marginTop: '16px', paddingTop: '16px', borderTop: '1px solid var(--gray-100)' }}>
           <Button
             variant={isSelected ? "primary" : "secondary"}
-            className="w-full"
-            onClick={onSelect}
+            style={{ width: '100%' }}
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect();
+            }}
           >
-            {isSelected ? "선택됨" : "이 의료진 선택"}
+            {isSelected ? "선택됨 ✓" : "이 의료진 선택"}
           </Button>
         </div>
       </div>
-    </Card>
+    </div>
   );
 }

@@ -59,23 +59,14 @@ export function DoctorList({
     const filtered = scored.filter((item) => item.score > 0);
 
     // 정렬
-    switch (sortBy) {
-      case "career":
-        filtered.sort((a, b) => {
-          const aCareer = a.doctor.career.length;
-          const bCareer = b.doctor.career.length;
-          return bCareer - aCareer;
-        });
-        break;
-      case "available":
-        filtered.sort((a, b) => {
-          const aAvailable = a.doctor.availableSlots.filter((s) => s.available).length;
-          const bAvailable = b.doctor.availableSlots.filter((s) => s.available).length;
-          return bAvailable - aAvailable;
-        });
-        break;
-      default:
-        filtered.sort((a, b) => b.score - a.score);
+    if (sortBy === "available") {
+      filtered.sort((a, b) => {
+        const aAvailable = a.doctor.availableSlots.filter((s) => s.available).length;
+        const bAvailable = b.doctor.availableSlots.filter((s) => s.available).length;
+        return bAvailable - aAvailable;
+      });
+    } else {
+      filtered.sort((a, b) => b.score - a.score);
     }
 
     return filtered;
@@ -83,8 +74,8 @@ export function DoctorList({
 
   if (selectedSymptoms.length === 0) {
     return (
-      <div className="text-center py-12 text-[var(--gray-500)]">
-        <p className="text-lg">증상을 선택하시면 맞춤 의료진을 추천해드립니다</p>
+      <div style={{ textAlign: 'center', padding: '48px 0', color: 'var(--gray-500)' }}>
+        <p style={{ fontSize: '16px' }}>증상을 선택하시면 맞춤 의료진을 추천해드립니다</p>
       </div>
     );
   }
@@ -92,20 +83,25 @@ export function DoctorList({
   return (
     <div>
       {/* Sort Options */}
-      <div className="flex gap-2 mb-6">
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '24px' }}>
         {[
           { value: "recommended", label: "추천순" },
-          { value: "career", label: "경력순" },
           { value: "available", label: "빠른예약순" },
         ].map((option) => (
           <button
             key={option.value}
             onClick={() => setSortBy(option.value as SortOption)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              sortBy === option.value
-                ? "bg-[var(--primary-500)] text-white"
-                : "bg-[var(--gray-100)] text-[var(--gray-700)] hover:bg-[var(--gray-200)]"
-            }`}
+            style={{
+              padding: '10px 18px',
+              borderRadius: '9999px',
+              fontSize: '14px',
+              fontWeight: 500,
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+              backgroundColor: sortBy === option.value ? 'var(--primary-500)' : 'var(--gray-100)',
+              color: sortBy === option.value ? 'white' : 'var(--gray-700)'
+            }}
           >
             {option.label}
           </button>
@@ -114,13 +110,13 @@ export function DoctorList({
 
       {/* Doctor List */}
       {matchedDoctors.length === 0 ? (
-        <div className="text-center py-12 text-[var(--gray-500)]">
-          <p className="text-lg">선택하신 증상과 관련된 의료진이 없습니다</p>
-          <p className="text-sm mt-2">다른 증상을 선택해주세요</p>
+        <div style={{ textAlign: 'center', padding: '48px 0', color: 'var(--gray-500)' }}>
+          <p style={{ fontSize: '16px' }}>선택하신 증상과 관련된 의료진이 없습니다</p>
+          <p style={{ fontSize: '14px', marginTop: '8px' }}>다른 증상을 선택해주세요</p>
         </div>
       ) : (
-        <div className="grid md:grid-cols-2 gap-4">
-          {matchedDoctors.map(({ doctor, score }, index) => (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '16px' }}>
+          {matchedDoctors.map(({ doctor }, index) => (
             <DoctorCard
               key={doctor.id}
               doctor={doctor}
