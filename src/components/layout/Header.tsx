@@ -28,7 +28,7 @@ export function Header() {
           : "bg-transparent"
       )}
     >
-      <div style={{ maxWidth: '72rem', marginLeft: 'auto', marginRight: 'auto' }} className="px-6 lg:px-8">
+      <div className="header-container">
         <div className="flex items-center justify-between h-20 lg:h-24">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
@@ -82,8 +82,21 @@ export function Header() {
 
       {/* Mobile Menu */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden bg-white border-t border-[var(--gray-200)] animate-slide-down shadow-lg">
-          <nav className="max-w-7xl mx-auto px-6 py-6">
+        <div
+          style={{
+            position: 'fixed',
+            top: '80px',
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'white',
+            zIndex: 50,
+            overflowY: 'auto',
+            WebkitOverflowScrolling: 'touch'
+          }}
+          className="lg:hidden"
+        >
+          <nav style={{ padding: '24px 20px', paddingBottom: '120px' }}>
             <Navigation isMobile onItemClick={() => setIsMobileMenuOpen(false)} />
           </nav>
         </div>

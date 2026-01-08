@@ -65,19 +65,38 @@ export default function LocationPage() {
 
   return (
     <main style={{ paddingTop: '80px', minHeight: '100vh', backgroundColor: 'var(--slate-50)' }}>
+      <style>{`
+        .location-grid-main {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 20px;
+          margin-bottom: 24px;
+        }
+        @media (min-width: 768px) {
+          .location-grid-main {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+        .location-grid-transport {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+        @media (min-width: 768px) {
+          .location-grid-transport {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+      `}</style>
+
       <PageHeader
         title="오시는 길"
         description="대전우리병원으로 쉽고 편하게 찾아오세요"
       />
 
       <div style={{ maxWidth: '80rem', margin: '0 auto', padding: '24px 20px' }}>
-        {/* 지도 + 기본정보 - 2열 배치 */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: '20px',
-          marginBottom: '24px'
-        }}>
+        {/* 지도 + 기본정보 - 반응형 배치 */}
+        <div className="location-grid-main">
           {/* 지도 영역 */}
           <div style={{
             backgroundColor: 'white',
@@ -195,7 +214,7 @@ export default function LocationPage() {
                   <p style={{ fontSize: '12px', color: 'var(--gray-500)', marginBottom: '4px' }}>대표전화</p>
                   <a
                     href={`tel:${hospitalInfo.phone}`}
-                    style={{ fontSize: '20px', color: 'var(--gray-900)', fontWeight: 700, textDecoration: 'none' }}
+                    style={{ fontSize: '20px', color: 'var(--gray-900)', fontWeight: 700, textDecoration: 'none', display: 'block' }}
                   >
                     {hospitalInfo.phone}
                   </a>
@@ -270,7 +289,7 @@ export default function LocationPage() {
             교통편 및 주차 안내
           </h2>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '12px' }}>
+          <div className="location-grid-transport">
             {/* 버스 */}
             <div style={{
               padding: '16px',

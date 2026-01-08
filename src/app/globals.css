@@ -177,10 +177,32 @@
 }
 
 /* Base Styles */
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+}
+
+/* Input 요소 강제 스타일 - iOS/Safari 대응 */
+input,
+textarea,
+select,
+button {
+  box-sizing: border-box !important;
+  max-width: 100% !important;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"] {
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
 }
 
 html {
@@ -501,4 +523,432 @@ p {
 
 .btn-ghost:hover {
   background: var(--slate-100);
+}
+
+/* ============================================
+   Container Classes - Mobile Padding Fix
+   ============================================ */
+
+.header-container {
+  max-width: 72rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .header-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .header-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+.hero-container {
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .hero-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-container {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+/* Location Section */
+.location-section {
+  padding: 32px 0;
+  background-color: var(--slate-50);
+}
+
+.location-container {
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .location-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+.location-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  background-color: white;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--slate-200);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+@media (min-width: 768px) {
+  .location-card {
+    grid-template-columns: 1.2fr 1fr;
+  }
+}
+
+/* ============================================
+   Common Section & Content Containers
+   ============================================ */
+
+.section-container {
+  padding: 32px 0;
+}
+
+@media (min-width: 768px) {
+  .section-container {
+    padding: 40px 0;
+  }
+}
+
+.content-container {
+  max-width: 80rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .content-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .content-container {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+/* ============================================
+   Card Grids - Responsive
+   ============================================ */
+
+/* 3-column card grid */
+.card-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .card-grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+}
+
+/* Body part selection grid */
+.body-part-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 640px) {
+  .body-part-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .body-part-grid {
+    grid-template-columns: repeat(7, 1fr);
+  }
+}
+
+/* ============================================
+   Footer Styles - Responsive
+   ============================================ */
+
+.footer-container {
+  max-width: 72rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 32px 1rem 24px;
+}
+
+@media (min-width: 640px) {
+  .footer-container {
+    padding: 32px 1.5rem 24px;
+  }
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 640px) {
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px;
+  }
+}
+
+@media (min-width: 768px) {
+  .footer-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ============================================
+   Booking Page Styles
+   ============================================ */
+
+.booking-page-container {
+  max-width: 72rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 100px 1rem 120px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+@media (min-width: 640px) {
+  .booking-page-container {
+    padding: 120px 1.5rem 48px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .booking-page-container {
+    padding: 120px 3rem 48px;
+  }
+}
+
+/* Progress Bar Responsive */
+.progress-mobile {
+  display: block;
+}
+
+.progress-desktop {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .progress-mobile {
+    display: none;
+  }
+
+  .progress-desktop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+  }
+}
+
+/* Booking Navigation Buttons */
+.booking-nav-buttons {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background-color: white;
+  border-top: 1px solid var(--gray-200);
+  z-index: 40;
+}
+
+@media (min-width: 640px) {
+  .booking-nav-buttons {
+    position: static;
+    padding: 0;
+    margin-top: 32px;
+    background-color: transparent;
+    border-top: none;
+    justify-content: flex-end;
+  }
+}
+
+.booking-nav-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+@media (min-width: 640px) {
+  .booking-nav-btn {
+    flex: none;
+    padding: 14px 28px;
+  }
+}
+
+.booking-nav-btn-primary {
+  background-color: var(--primary-500);
+  color: white;
+}
+
+.booking-nav-btn-primary:hover:not(:disabled) {
+  background-color: var(--primary-600);
+}
+
+.booking-nav-btn-secondary {
+  background-color: white;
+  color: var(--gray-600);
+  border: 1px solid var(--gray-200);
+}
+
+.booking-nav-btn-secondary:hover {
+  background-color: var(--gray-50);
+  border-color: var(--gray-300);
+}
+
+/* ============================================
+   Floating Action Button
+   ============================================ */
+
+.floating-action-btn {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1rem;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .floating-action-btn {
+    right: 1.5rem;
+  }
+}
+
+/* 예약 페이지에서는 하단 네비게이션 버튼 위로 이동 */
+.fab-booking-page {
+  bottom: 5.5rem;
+}
+
+@media (min-width: 640px) {
+  .fab-booking-page {
+    bottom: 1.5rem;
+  }
+}
+
+/* ============================================
+   Symptom Selector Grid - Responsive
+   ============================================ */
+
+.symptom-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .symptom-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Schedule Grid - Calendar & Time Slots */
+.schedule-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .schedule-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Booking Form Grid - Name & Phone */
+.booking-form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 640px) {
+  .booking-form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Doctor Grid - Responsive */
+.doctor-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 640px) {
+  .doctor-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .doctor-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Booking Form Card - Responsive */
+.booking-form-card {
+  background-color: white;
+  border-radius: 16px;
+  border: 1px solid var(--gray-200);
+  padding: 16px;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .booking-form-card {
+    padding: 24px;
+  }
 }

@@ -20,21 +20,27 @@ export function HeroSection() {
       </div>
 
       {/* 헤더 높이를 고려한 상단 패딩 + 섹션 간격 확장 */}
-      <div style={{ maxWidth: '80rem', marginLeft: 'auto', marginRight: 'auto' }} className="relative px-6 lg:px-12 py-20 lg:py-28 w-full">
+      <div className="hero-container relative py-20 lg:py-28 w-full">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center" style={{ marginTop: '80px' }}>
           {/* Text Content */}
           <div className="text-center lg:text-left">
             {/* 뱃지 */}
             <div
-              className="inline-flex items-center gap-2 rounded-full text-sm font-semibold mb-6"
               style={{
-                padding: '8px 16px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '4px 10px',
                 backgroundColor: 'var(--primary-50)',
                 color: 'var(--primary-600)',
-                border: '1px solid var(--primary-100)'
+                border: '1px solid var(--primary-100)',
+                borderRadius: '9999px',
+                fontSize: '13px',
+                fontWeight: 600,
+                marginBottom: '24px'
               }}
             >
-              <span style={{ width: '8px', height: '8px', backgroundColor: 'var(--primary-500)', borderRadius: '50%' }} />
+              <span style={{ width: '5px', height: '5px', backgroundColor: 'var(--primary-500)', borderRadius: '50%' }} />
               대전 지역 척추·관절 전문
             </div>
 
@@ -90,24 +96,56 @@ export function HeroSection() {
             </div>
 
             {/* CTA Buttons */}
-            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-              <Link href="/booking">
-                <Button
-                  variant="cta"
-                  size="lg"
-                  rightIcon={<ArrowRight className="w-5 h-5" />}
+            <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'stretch' }}>
+              <Link href="/booking" style={{ textDecoration: 'none', display: 'flex' }}>
+                <button
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    height: '48px',
+                    padding: '0 22px',
+                    fontSize: '15px',
+                    fontWeight: 600,
+                    borderRadius: '12px',
+                    border: 'none',
+                    backgroundColor: 'var(--primary-500)',
+                    color: 'white',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 14px rgba(30, 58, 95, 0.3)',
+                    transition: 'all 0.2s',
+                    boxSizing: 'border-box'
+                  }}
                 >
                   온라인 예약하기
-                </Button>
+                  <ArrowRight style={{ width: '16px', height: '16px' }} />
+                </button>
               </Link>
-              <a href="tel:1577-0052">
-                <Button
-                  variant="secondary"
-                  size="lg"
-                  leftIcon={<Phone className="w-5 h-5" />}
+              <a href="tel:1577-0052" style={{ textDecoration: 'none', display: 'flex' }}>
+                <button
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    height: '48px',
+                    padding: '0 22px',
+                    fontSize: '15px',
+                    fontWeight: 600,
+                    borderRadius: '12px',
+                    border: 'none',
+                    backgroundColor: 'white',
+                    color: 'var(--primary-600)',
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.12)',
+                    transition: 'all 0.2s',
+                    boxSizing: 'border-box'
+                  }}
                 >
+                  <Phone style={{ width: '16px', height: '16px' }} />
                   1577-0052
-                </Button>
+                </button>
               </a>
             </div>
           </div>

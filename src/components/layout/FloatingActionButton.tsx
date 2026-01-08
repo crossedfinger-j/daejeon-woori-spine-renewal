@@ -1,11 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { Phone, MessageCircle, X, ChevronUp } from "lucide-react";
 
 export function FloatingActionButton() {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const pathname = usePathname();
+
+  // 예약 페이지 여부 확인 (하단 네비게이션 버튼과 겹침 방지)
+  const isBookingPage = pathname?.startsWith("/booking") && pathname !== "/booking";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,7 +26,7 @@ export function FloatingActionButton() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4">
+    <div className={`floating-action-btn ${isBookingPage ? 'fab-booking-page' : ''}`}>
       {/* Scroll to Top Button */}
       {showScrollTop && (
         <button
@@ -73,7 +78,7 @@ export function FloatingActionButton() {
       {/* Main FAB Button */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className={`w-20 h-20 rounded-full shadow-2xl transition-all duration-300 flex items-center justify-center hover:scale-110 ${
+        className={`w-16 h-16 rounded-full shadow-2xl transition-all duration-300 flex items-center justify-center hover:scale-110 ${
           isExpanded
             ? "bg-[var(--gray-700)] text-white rotate-180"
             : "bg-gradient-to-br from-[var(--primary-500)] to-[var(--primary-600)] text-white"
@@ -81,11 +86,11 @@ export function FloatingActionButton() {
         aria-label={isExpanded ? "메뉴 닫기" : "상담 메뉴 열기"}
       >
         {isExpanded ? (
-          <X className="w-9 h-9" />
+          <X className="w-7 h-7" />
         ) : (
           <div className="flex flex-col items-center">
-            <Phone className="w-8 h-8 mb-1" />
-            <span className="text-xs font-bold">상담</span>
+            <Phone className="w-6 h-6" />
+            <span className="text-[10px] font-bold mt-0.5">상담</span>
           </div>
         )}
       </button>

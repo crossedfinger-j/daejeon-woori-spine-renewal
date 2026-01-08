@@ -13,7 +13,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const inputId = id || label?.toLowerCase().replace(/\s/g, "-");
 
     return (
-      <div style={{ width: '100%' }}>
+      <div style={{ width: '100%', maxWidth: '100%', boxSizing: 'border-box', overflow: 'hidden' }}>
         {label && (
           <label
             htmlFor={inputId}
@@ -34,6 +34,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           type={type}
           style={{
             width: '100%',
+            maxWidth: '100%',
             height: '52px',
             padding: '0 16px',
             fontSize: '16px',
@@ -43,6 +44,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             transition: 'all 0.2s',
             outline: 'none',
             cursor: props.disabled ? 'not-allowed' : 'text',
+            boxSizing: 'border-box',
             ...style
           }}
           aria-invalid={error ? "true" : "false"}

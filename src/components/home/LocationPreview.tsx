@@ -5,8 +5,8 @@ import { MapPin, Phone, Clock, Car, Bus, ArrowRight } from "lucide-react";
 
 export function LocationPreview() {
   return (
-    <section style={{ padding: '32px 0', backgroundColor: 'var(--slate-50)' }}>
-      <div style={{ maxWidth: '80rem', marginLeft: 'auto', marginRight: 'auto', padding: '0 24px' }}>
+    <section className="location-section">
+      <div className="location-container">
         {/* 헤더 영역 */}
         <div style={{ textAlign: 'center', marginBottom: '24px' }}>
           <h2 style={{ fontSize: '24px', fontWeight: 700, color: 'var(--gray-900)', marginBottom: '8px' }}>
@@ -18,15 +18,7 @@ export function LocationPreview() {
         </div>
 
         {/* 통합 카드 */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1.2fr 1fr',
-          backgroundColor: 'white',
-          borderRadius: '16px',
-          overflow: 'hidden',
-          border: '1px solid var(--slate-200)',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
-        }}>
+        <div className="location-card">
           {/* 지도 영역 - 왼쪽 */}
           <div style={{
             backgroundColor: 'var(--slate-100)',

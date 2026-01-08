@@ -30,7 +30,7 @@ function ScheduleModal({ doctor, onClose, onBooking }: { doctor: typeof doctors[
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '24px'
+      padding: '16px'
     }}>
       {/* Backdrop */}
       <div
@@ -49,68 +49,70 @@ function ScheduleModal({ doctor, onClose, onBooking }: { doctor: typeof doctors[
       <div style={{
         position: 'relative',
         backgroundColor: 'white',
-        borderRadius: '24px',
+        borderRadius: '20px',
         boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
         width: '100%',
         maxWidth: '420px',
-        maxHeight: '90vh',
-        overflow: 'auto'
+        maxHeight: 'calc(100vh - 32px)',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden'
       }}>
-        {/* Header */}
+        {/* Header - 고정 */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '24px 28px',
-          borderBottom: '1px solid var(--gray-100)'
+          padding: '20px 24px',
+          borderBottom: '1px solid var(--gray-100)',
+          flexShrink: 0
         }}>
-          <div>
-            <h3 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--gray-900)' }}>
-              {doctor.name} 원장님
-            </h3>
-            <p style={{ fontSize: '16px', color: 'var(--gray-500)', marginTop: '6px' }}>
-              주간 진료 시간표
-            </p>
-          </div>
+          <h3 style={{ fontSize: '20px', fontWeight: 700, color: 'var(--gray-900)' }}>
+            {doctor.name} 원장님
+          </h3>
           <button
             onClick={onClose}
             style={{
-              width: '44px',
-              height: '44px',
+              width: '40px',
+              height: '40px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               borderRadius: '50%',
               border: 'none',
-              backgroundColor: 'transparent',
+              backgroundColor: 'var(--gray-100)',
               cursor: 'pointer',
-              transition: 'background-color 0.2s'
+              transition: 'background-color 0.2s',
+              flexShrink: 0
             }}
-            onMouseOver={(e) => e.currentTarget.style.backgroundColor = 'var(--gray-100)'}
-            onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           >
-            <X style={{ width: '24px', height: '24px', color: 'var(--gray-500)' }} />
+            <X style={{ width: '20px', height: '20px', color: 'var(--gray-600)' }} />
           </button>
         </div>
 
-        {/* Schedule Table */}
-        <div style={{ padding: '24px 28px' }}>
+        {/* Schedule Table - 스크롤 영역 */}
+        <div style={{
+          padding: '20px 24px',
+          overflowY: 'auto',
+          flex: 1,
+          WebkitOverflowScrolling: 'touch'
+        }}>
           <table style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead>
               <tr>
-                <th style={{ textAlign: 'left', padding: '12px 0', fontSize: '15px', fontWeight: 500, color: 'var(--gray-500)' }}>요일</th>
-                <th style={{ textAlign: 'center', padding: '12px 0', fontSize: '15px', fontWeight: 500, color: 'var(--gray-500)' }}>오전</th>
-                <th style={{ textAlign: 'center', padding: '12px 0', fontSize: '15px', fontWeight: 500, color: 'var(--gray-500)' }}>오후</th>
+                <th style={{ textAlign: 'left', padding: '10px 0', fontSize: '14px', fontWeight: 500, color: 'var(--gray-500)' }}>요일</th>
+                <th style={{ textAlign: 'center', padding: '10px 0', fontSize: '14px', fontWeight: 500, color: 'var(--gray-500)' }}>오전</th>
+                <th style={{ textAlign: 'center', padding: '10px 0', fontSize: '14px', fontWeight: 500, color: 'var(--gray-500)' }}>오후</th>
               </tr>
             </thead>
             <tbody>
               {schedule.map((item) => (
                 <tr key={item.day} style={{ borderTop: '1px solid var(--gray-100)' }}>
-                  <td style={{ padding: '14px 0', fontSize: '16px', fontWeight: 500, color: 'var(--gray-900)' }}>{item.day}</td>
-                  <td style={{ padding: '14px 0', fontSize: '16px', textAlign: 'center', color: 'var(--gray-600)' }}>{item.am}</td>
+                  <td style={{ padding: '12px 0', fontSize: '15px', fontWeight: 500, color: 'var(--gray-900)' }}>{item.day}</td>
+                  <td style={{ padding: '12px 0', fontSize: '15px', textAlign: 'center', color: 'var(--gray-600)' }}>{item.am}</td>
                   <td style={{
-                    padding: '14px 0',
-                    fontSize: '16px',
+                    padding: '12px 0',
+                    fontSize: '15px',
                     textAlign: 'center',
                     color: item.pm === '휴진' ? 'var(--error-500)' : 'var(--gray-600)',
                     fontWeight: item.pm === '휴진' ? 500 : 400
@@ -123,25 +125,24 @@ function ScheduleModal({ doctor, onClose, onBooking }: { doctor: typeof doctors[
           </table>
 
           <p style={{
-            marginTop: '20px',
-            fontSize: '14px',
+            marginTop: '16px',
+            fontSize: '13px',
             color: 'var(--gray-500)',
             textAlign: 'center',
             lineHeight: 1.6
           }}>
-            <span style={{ whiteSpace: 'nowrap' }}>* 점심시간: 12:30 - 14:00</span>
-            <span style={{ margin: '0 8px', color: 'var(--gray-300)' }}>|</span>
-            <span style={{ whiteSpace: 'nowrap' }}>진료 일정은 변경될 수 있습니다</span>
+            * 점심시간: 12:30 - 14:00<br />
+            진료 일정은 변경될 수 있습니다
           </p>
         </div>
 
-        {/* Footer */}
+        {/* Footer - 고정 */}
         <div style={{
-          padding: '20px 28px',
+          padding: '16px 24px',
+          paddingBottom: 'max(16px, env(safe-area-inset-bottom))',
           borderTop: '1px solid var(--gray-100)',
           backgroundColor: 'var(--gray-50)',
-          borderBottomLeftRadius: '24px',
-          borderBottomRightRadius: '24px'
+          flexShrink: 0
         }}>
           <Button variant="cta" size="lg" style={{ width: '100%' }} onClick={onBooking}>
             예약하기
@@ -174,8 +175,8 @@ export function DoctorHighlight() {
 
   return (
     // 섹션 간격 확장 - Silver-Friendly
-    <section className="py-20 lg:py-32 bg-white">
-      <div style={{ maxWidth: '80rem', marginLeft: 'auto', marginRight: 'auto', padding: '40px 24px' }} className="lg:px-12">
+    <section className="section-container" style={{ backgroundColor: 'white' }}>
+      <div className="content-container">
         {/* 헤더 영역 간격 확장 */}
         <div className="text-center mb-14 lg:mb-20">
           <h2 className="text-4xl lg:text-5xl font-bold text-[var(--gray-900)] mb-8 lg:mb-10" style={{ lineHeight: '1.3' }}>
@@ -187,7 +188,7 @@ export function DoctorHighlight() {
         </div>
 
         {/* 카드 그리드 */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="card-grid-3">
           {highlightedDoctors.map((doctor) => (
             <div key={doctor.id} className="bg-white rounded-3xl border border-[var(--slate-100)] shadow-lg shadow-slate-200/50 hover:shadow-xl hover:shadow-slate-300/50 transition-all duration-300 overflow-hidden hover:-translate-y-2">
               {/* Profile Image Area - 더 컴팩트하게 */}

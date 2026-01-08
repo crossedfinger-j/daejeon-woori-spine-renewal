@@ -8,9 +8,10 @@ interface DoctorCardProps {
   isSelected: boolean;
   onSelect: () => void;
   recommended?: boolean;
+  preSelected?: boolean;
 }
 
-export function DoctorCard({ doctor, isSelected, onSelect, recommended }: DoctorCardProps) {
+export function DoctorCard({ doctor, isSelected, onSelect, recommended, preSelected }: DoctorCardProps) {
   return (
     <div
       style={{
@@ -25,7 +26,22 @@ export function DoctorCard({ doctor, isSelected, onSelect, recommended }: Doctor
       }}
       onClick={onSelect}
     >
-      {recommended && (
+      {preSelected && (
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          backgroundColor: 'var(--success-500)',
+          color: 'white',
+          fontSize: '12px',
+          fontWeight: 600,
+          padding: '6px 12px',
+          borderBottomRightRadius: '12px'
+        }}>
+          선택된 의료진
+        </div>
+      )}
+      {recommended && !preSelected && (
         <div style={{
           position: 'absolute',
           top: 0,

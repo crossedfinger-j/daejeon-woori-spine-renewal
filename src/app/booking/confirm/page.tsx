@@ -67,35 +67,7 @@ export default function ConfirmPage() {
   }
 
   return (
-    <div style={{ position: 'relative', maxWidth: '56rem', marginLeft: 'auto', marginRight: 'auto', paddingTop: '140px', paddingBottom: '32px', paddingLeft: '24px', paddingRight: '24px' }}>
-      {/* 왼쪽 이전 버튼 */}
-      <div style={{
-        position: 'fixed',
-        left: '24px',
-        top: '50%',
-        transform: 'translateY(-50%)',
-        zIndex: 30
-      }}>
-        <button
-          onClick={handleBack}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '56px',
-            height: '56px',
-            borderRadius: '50%',
-            backgroundColor: 'white',
-            border: '1px solid var(--gray-200)',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-            cursor: 'pointer',
-            transition: 'all 0.2s'
-          }}
-        >
-          <ArrowLeft style={{ width: '24px', height: '24px', color: 'var(--gray-600)' }} />
-        </button>
-      </div>
-
+    <div className="booking-page-container">
       <ProgressBar currentStep={4} />
 
       <div style={{ marginBottom: '32px' }}>
@@ -119,11 +91,31 @@ export default function ConfirmPage() {
       </div>
 
       {/* Form */}
-      <div style={{ backgroundColor: 'white', borderRadius: '16px', border: '1px solid var(--gray-200)', padding: '24px' }}>
+      <div style={{
+        backgroundColor: 'white',
+        borderRadius: '16px',
+        border: '1px solid var(--gray-200)',
+        padding: '16px',
+        boxSizing: 'border-box',
+        width: '100%',
+        maxWidth: '100%',
+        overflow: 'hidden'
+      }}>
         <h2 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--gray-900)', marginBottom: '24px' }}>
           환자 정보 입력
         </h2>
         <BookingForm onSubmit={handleSubmit} isLoading={isSubmitting} />
+      </div>
+
+      {/* 하단 고정 네비게이션 버튼 - 이전만 */}
+      <div className="booking-nav-buttons">
+        <button
+          onClick={handleBack}
+          className="booking-nav-btn booking-nav-btn-secondary"
+        >
+          <ArrowLeft style={{ width: '20px', height: '20px' }} />
+          <span>이전</span>
+        </button>
       </div>
 
       {/* Success Modal */}

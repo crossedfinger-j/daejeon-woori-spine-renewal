@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { DoctorList, ProgressBar, BookingSummary } from "@/components/booking";
 import { useBookingStore } from "@/stores/bookingStore";
@@ -16,6 +16,12 @@ export default function DoctorPage() {
     setStep,
   } = useBookingStore();
 
+  // 페이지 진입 시 이미 선택되어 있던 의료진 ID 저장 (미리 선택된 경우)
+  // 초기 렌더링 시점에 selectedDoctor가 있으면 그 ID를 저장
+  const [preSelectedDoctorId] = useState<string | null>(() => {
+    return selectedDoctor?.id ?? null;
+  });
+
   useEffect(() => {
     // 증상 선택 없이 직접 접근 시 리다이렉트
     if (selectedSymptoms.length === 0) {
@@ -23,7 +29,8 @@ export default function DoctorPage() {
       return;
     }
     setStep(2);
-  }, [selectedSymptoms, router, setStep]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleNext = () => {
     router.push("/booking/schedule");
@@ -36,68 +43,7 @@ export default function DoctorPage() {
   const canProceed = selectedDoctor !== null;
 
   return (
-    <div style={{ position: 'relative', maxWidth: '72rem', marginLeft: 'auto', marginRight: 'auto', paddingTop: '140px', paddingBottom: '32px', paddingLeft: '24px', paddingRight: '24px' }}>
-      {/* 왼쪽 이전 버튼 */}
-      <div style={{
-        position: 'fixed',
-        left: '24px',
-        top: '50%',
-        transform: 'translateY(-50%)',
-        zIndex: 30
-      }}>
-        <button
-          onClick={handleBack}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '56px',
-            height: '56px',
-            borderRadius: '50%',
-            backgroundColor: 'white',
-            border: '1px solid var(--gray-200)',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-            cursor: 'pointer',
-            transition: 'all 0.2s'
-          }}
-        >
-          <ArrowLeft style={{ width: '24px', height: '24px', color: 'var(--gray-600)' }} />
-        </button>
-      </div>
-
-      {/* 오른쪽 다음 버튼 */}
-      <div style={{
-        position: 'fixed',
-        right: '24px',
-        top: '50%',
-        transform: 'translateY(-50%)',
-        zIndex: 30
-      }}>
-        <button
-          onClick={handleNext}
-          disabled={!canProceed}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-            padding: '16px 24px',
-            borderRadius: '9999px',
-            backgroundColor: canProceed ? 'var(--primary-500)' : 'var(--gray-300)',
-            border: 'none',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-            cursor: canProceed ? 'pointer' : 'not-allowed',
-            transition: 'all 0.2s',
-            color: 'white',
-            fontSize: '16px',
-            fontWeight: 600
-          }}
-        >
-          <span>다음</span>
-          <ArrowRight style={{ width: '20px', height: '20px' }} />
-        </button>
-      </div>
-
+    <div className="booking-page-container">
       <ProgressBar currentStep={2} />
 
       <div style={{ marginBottom: '32px' }}>
@@ -125,7 +71,31 @@ export default function DoctorPage() {
         selectedSymptoms={selectedSymptoms}
         selectedDoctor={selectedDoctor}
         onSelectDoctor={setDoctor}
+        preSelectedDoctorId={preSelectedDoctorId}
       />
+
+      {/* 하단 고정 네비게이션 버튼 */}
+      <div className="booking-nav-buttons">
+        <button
+          onClick={handleBack}
+          className="booking-nav-btn booking-nav-btn-secondary"
+        >
+          <ArrowLeft style={{ width: '20px', height: '20px' }} />
+          <span>이전</span>
+        </button>
+        <button
+          onClick={handleNext}
+          disabled={!canProceed}
+          className="booking-nav-btn booking-nav-btn-primary"
+          style={{
+            backgroundColor: canProceed ? 'var(--primary-500)' : 'var(--gray-300)',
+            cursor: canProceed ? 'pointer' : 'not-allowed'
+          }}
+        >
+          <span>다음</span>
+          <ArrowRight style={{ width: '20px', height: '20px' }} />
+        </button>
+      </div>
     </div>
   );
 }

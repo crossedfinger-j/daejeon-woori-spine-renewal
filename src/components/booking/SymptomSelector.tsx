@@ -132,7 +132,7 @@ export function SymptomSelector({
               <span>{partInfo.nameKo} 관련 증상</span>
             </h3>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '12px' }}>
+            <div className="symptom-grid">
               {symptoms.map((symptom) => {
                 const isSelected = selectedSymptoms.some((s) => s.id === symptom.id);
 

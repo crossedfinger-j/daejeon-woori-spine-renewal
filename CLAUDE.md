@@ -73,9 +73,24 @@ lib/                 # Utilities (cn function, validation)
 
 **Data Layer**: Mock data in `src/data/` with helper functions (e.g., `getDoctorById`, `getDoctorsByCenter`, `getDoctorsBySymptoms`).
 
+**SSR Hydration**: Time slots use deterministic hash-based availability patterns instead of `Math.random()` to prevent server/client mismatch. See `generateTimeSlots()` in [doctors.ts](src/data/doctors.ts).
+
+**Form Validation**: Uses Zod schemas in `lib/validation.ts` with React Hook Form for patient info forms.
+
+**Imports**: Types are re-exported from `@/types` index barrel. Components use barrel exports from their respective index files.
+
 ## Design Constraints
 
 - **Accessibility**: Min 48px button height, 56px touch targets (`.touch-target` class), high contrast colors, 3px focus outlines
 - **Responsive**: Mobile-first, breakpoints at 640/768/1024/1280px
 - **Sticky Action Bar**: Always visible bottom bar with KakaoTalk, Phone, Booking CTAs
 - **Safe Area**: Bottom padding for iOS notch (`env(safe-area-inset-bottom)`)
+
+## Center Slugs
+
+The 5 specialty centers use these slugs for routing (`/centers/[slug]`):
+- `spine` - 척추센터
+- `joint` - 관절센터
+- `pain` - 통증센터
+- `rehab` - 재활센터
+- `checkup` - 건강검진센터

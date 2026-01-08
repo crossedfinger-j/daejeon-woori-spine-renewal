@@ -121,8 +121,8 @@ export function QuickBookingCTA() {
   const [selectedPart, setSelectedPart] = useState<string | null>(null);
 
   return (
-    <section style={{ padding: '40px 0', backgroundColor: 'white' }}>
-      <div style={{ maxWidth: '80rem', marginLeft: 'auto', marginRight: 'auto', padding: '0 24px' }}>
+    <section className="section-container" style={{ backgroundColor: 'white' }}>
+      <div className="content-container">
         {/* 헤더 영역 */}
         <div style={{ textAlign: 'center', marginBottom: '28px' }}>
           <h2 style={{ fontSize: '24px', fontWeight: 700, color: 'var(--gray-900)', marginBottom: '8px' }}>
@@ -134,7 +134,7 @@ export function QuickBookingCTA() {
         </div>
 
         {/* 아이콘 그리드 - 반응형 */}
-        <div style={{ display: 'grid', gap: '12px', marginBottom: '24px' }} className="grid-cols-3 sm:grid-cols-4 md:grid-cols-7">
+        <div className="body-part-grid">
           {bodyParts.map((part) => {
             const isSelected = selectedPart === part.id;
             return (

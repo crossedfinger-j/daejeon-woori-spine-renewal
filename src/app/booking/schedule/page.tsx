@@ -58,68 +58,7 @@ export default function SchedulePage() {
   }
 
   return (
-    <div style={{ position: 'relative', maxWidth: '72rem', marginLeft: 'auto', marginRight: 'auto', paddingTop: '140px', paddingBottom: '32px', paddingLeft: '24px', paddingRight: '24px' }}>
-      {/* 왼쪽 이전 버튼 */}
-      <div style={{
-        position: 'fixed',
-        left: '24px',
-        top: '50%',
-        transform: 'translateY(-50%)',
-        zIndex: 30
-      }}>
-        <button
-          onClick={handleBack}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '56px',
-            height: '56px',
-            borderRadius: '50%',
-            backgroundColor: 'white',
-            border: '1px solid var(--gray-200)',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-            cursor: 'pointer',
-            transition: 'all 0.2s'
-          }}
-        >
-          <ArrowLeft style={{ width: '24px', height: '24px', color: 'var(--gray-600)' }} />
-        </button>
-      </div>
-
-      {/* 오른쪽 다음 버튼 */}
-      <div style={{
-        position: 'fixed',
-        right: '24px',
-        top: '50%',
-        transform: 'translateY(-50%)',
-        zIndex: 30
-      }}>
-        <button
-          onClick={handleNext}
-          disabled={!canProceed}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-            padding: '16px 24px',
-            borderRadius: '9999px',
-            backgroundColor: canProceed ? 'var(--primary-500)' : 'var(--gray-300)',
-            border: 'none',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-            cursor: canProceed ? 'pointer' : 'not-allowed',
-            transition: 'all 0.2s',
-            color: 'white',
-            fontSize: '16px',
-            fontWeight: 600
-          }}
-        >
-          <span>다음</span>
-          <ArrowRight style={{ width: '20px', height: '20px' }} />
-        </button>
-      </div>
-
+    <div className="booking-page-container">
       <ProgressBar currentStep={3} />
 
       <div style={{ marginBottom: '32px' }}>
@@ -142,8 +81,8 @@ export default function SchedulePage() {
         />
       </div>
 
-      {/* Calendar & Time Slots - 가로 배치 */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', alignItems: 'start' }}>
+      {/* Calendar & Time Slots - 반응형 그리드 */}
+      <div className="schedule-grid">
         <BookingCalendar
           selectedDate={selectedDate}
           onSelectDate={setDate}
@@ -160,6 +99,28 @@ export default function SchedulePage() {
         />
       </div>
 
+      {/* 하단 고정 네비게이션 버튼 */}
+      <div className="booking-nav-buttons">
+        <button
+          onClick={handleBack}
+          className="booking-nav-btn booking-nav-btn-secondary"
+        >
+          <ArrowLeft style={{ width: '20px', height: '20px' }} />
+          <span>이전</span>
+        </button>
+        <button
+          onClick={handleNext}
+          disabled={!canProceed}
+          className="booking-nav-btn booking-nav-btn-primary"
+          style={{
+            backgroundColor: canProceed ? 'var(--primary-500)' : 'var(--gray-300)',
+            cursor: canProceed ? 'pointer' : 'not-allowed'
+          }}
+        >
+          <span>다음</span>
+          <ArrowRight style={{ width: '20px', height: '20px' }} />
+        </button>
+      </div>
     </div>
   );
 }

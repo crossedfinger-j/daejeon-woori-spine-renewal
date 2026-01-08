@@ -9,6 +9,7 @@ interface DoctorListProps {
   selectedSymptoms: Symptom[];
   selectedDoctor: Doctor | null;
   onSelectDoctor: (doctor: Doctor) => void;
+  preSelectedDoctorId?: string | null;
 }
 
 type SortOption = "recommended" | "career" | "available";
@@ -17,6 +18,7 @@ export function DoctorList({
   selectedSymptoms,
   selectedDoctor,
   onSelectDoctor,
+  preSelectedDoctorId,
 }: DoctorListProps) {
   const [sortBy, setSortBy] = useState<SortOption>("recommended");
 
@@ -52,25 +54,36 @@ export function DoctorList({
         score += 3;
       }
 
+      // 이미 선택된 의료진에게 최고 점수 부여
+      if (selectedDoctor && doctor.id === selectedDoctor.id) {
+        score += 100;
+      }
+
       return { doctor, score };
     });
 
-    // 관련 의료진만 필터링 (점수 0 초과)
-    const filtered = scored.filter((item) => item.score > 0);
+    // 관련 의료진만 필터링 (점수 0 초과) - 단, 이미 선택된 의료진은 항상 포함
+    const filtered = scored.filter((item) => item.score > 0 || (selectedDoctor && item.doctor.id === selectedDoctor.id));
 
-    // 정렬
-    if (sortBy === "available") {
-      filtered.sort((a, b) => {
+    // 정렬 - 미리 선택된 의료진은 항상 맨 위에
+    filtered.sort((a, b) => {
+      // 미리 선택된 의료진은 항상 최상단
+      if (preSelectedDoctorId) {
+        if (a.doctor.id === preSelectedDoctorId) return -1;
+        if (b.doctor.id === preSelectedDoctorId) return 1;
+      }
+
+      if (sortBy === "available") {
         const aAvailable = a.doctor.availableSlots.filter((s) => s.available).length;
         const bAvailable = b.doctor.availableSlots.filter((s) => s.available).length;
         return bAvailable - aAvailable;
-      });
-    } else {
-      filtered.sort((a, b) => b.score - a.score);
-    }
+      } else {
+        return b.score - a.score;
+      }
+    });
 
     return filtered;
-  }, [selectedSymptoms, sortBy]);
+  }, [selectedSymptoms, selectedDoctor, sortBy, preSelectedDoctorId]);
 
   if (selectedSymptoms.length === 0) {
     return (
@@ -115,7 +128,7 @@ export function DoctorList({
           <p style={{ fontSize: '14px', marginTop: '8px' }}>다른 증상을 선택해주세요</p>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '16px' }}>
+        <div className="doctor-grid">
           {matchedDoctors.map(({ doctor }, index) => (
             <DoctorCard
               key={doctor.id}
@@ -123,6 +136,7 @@ export function DoctorList({
               isSelected={selectedDoctor?.id === doctor.id}
               onSelect={() => onSelectDoctor(doctor)}
               recommended={index === 0 && sortBy === "recommended"}
+              preSelected={preSelectedDoctorId === doctor.id}
             />
           ))}
         </div>

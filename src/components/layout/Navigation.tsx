@@ -33,27 +33,49 @@ export function Navigation({ isMobile = false, onItemClick }: NavigationProps) {
 
   if (isMobile) {
     return (
-      <ul className="space-y-2">
+      <ul style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         {navItems.map((item) => (
           <li key={item.href}>
             <Link
               href={item.href}
               onClick={onItemClick}
-              className={cn(
-                "block px-5 py-4 rounded-xl text-base font-medium transition-all",
-                isActive(item.href)
-                  ? "bg-[var(--primary-50)] text-[var(--primary-600)] border-l-4 border-[var(--primary-500)]"
-                  : "text-[var(--gray-700)] hover:bg-[var(--gray-50)] hover:text-[var(--primary-600)]"
-              )}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                minHeight: '56px',
+                padding: '16px 24px',
+                borderRadius: '16px',
+                fontSize: '18px',
+                fontWeight: 600,
+                textDecoration: 'none',
+                transition: 'all 0.2s',
+                backgroundColor: isActive(item.href) ? 'var(--primary-500)' : 'var(--gray-50)',
+                color: isActive(item.href) ? 'white' : 'var(--gray-800)',
+                border: isActive(item.href) ? '2px solid var(--primary-500)' : '2px solid var(--gray-200)'
+              }}
             >
               {item.label}
             </Link>
           </li>
         ))}
-        <li className="pt-6 border-t border-[var(--gray-200)] mt-4">
+        <li style={{ paddingTop: '24px', marginTop: '12px', borderTop: '1px solid var(--gray-200)' }}>
           <a
             href="tel:1577-0052"
-            className="flex items-center justify-center gap-2 px-5 py-4 bg-[var(--primary-50)] text-[var(--primary-600)] font-semibold rounded-xl"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '10px',
+              minHeight: '56px',
+              padding: '16px 24px',
+              backgroundColor: 'var(--primary-600)',
+              color: 'white',
+              fontWeight: 700,
+              fontSize: '18px',
+              borderRadius: '16px',
+              textDecoration: 'none',
+              boxShadow: '0 4px 12px rgba(30, 58, 95, 0.3)'
+            }}
           >
             전화상담: 1577-0052
           </a>

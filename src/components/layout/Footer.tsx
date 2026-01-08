@@ -38,12 +38,7 @@ export function Footer() {
         background: 'linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent)'
       }} />
 
-      <div style={{
-        maxWidth: '72rem',
-        marginLeft: 'auto',
-        marginRight: 'auto',
-        padding: '32px 24px 24px'
-      }}>
+      <div className="footer-container">
         {/* 상단: 로고 + 전화번호 */}
         <div style={{
           display: 'flex',
@@ -93,13 +88,8 @@ export function Footer() {
           </a>
         </div>
 
-        {/* 메인 컨텐츠 - 3열 */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(3, 1fr)',
-          gap: '32px',
-          marginBottom: '24px'
-        }}>
+        {/* 메인 컨텐츠 - 반응형 그리드 */}
+        <div className="footer-grid">
           {/* 진료시간 */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>

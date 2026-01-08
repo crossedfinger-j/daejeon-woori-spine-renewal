@@ -25,8 +25,8 @@ const colorMap: Record<string, { bg: string; icon: string }> = {
 
 export function CenterShowcase() {
   return (
-    <section style={{ padding: '32px 0', backgroundColor: 'var(--slate-50)' }}>
-      <div style={{ maxWidth: '80rem', marginLeft: 'auto', marginRight: 'auto', padding: '0 24px' }}>
+    <section className="section-container" style={{ backgroundColor: 'var(--slate-50)' }}>
+      <div className="content-container">
         {/* 헤더 영역 */}
         <div style={{ textAlign: 'center', marginBottom: '24px' }}>
           <h2 style={{ fontSize: '24px', fontWeight: 700, color: 'var(--gray-900)', marginBottom: '8px' }}>
@@ -38,7 +38,7 @@ export function CenterShowcase() {
         </div>
 
         {/* 카드 그리드 */}
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="card-grid-3">
           {centers.map((center) => {
             const colors = colorMap[center.slug] || colorMap.spine;
             return (

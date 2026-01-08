@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   User,
@@ -29,7 +29,7 @@ const departmentOrder: DepartmentType[] = [
   "rehab"
 ];
 
-export default function DoctorsPage() {
+function DoctorsPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const expandDoctorId = searchParams.get("expand");
@@ -76,6 +76,19 @@ export default function DoctorsPage() {
 
   return (
     <main style={{ paddingTop: '80px', minHeight: '100vh', backgroundColor: 'var(--slate-50)' }}>
+      <style>{`
+        .doctor-intro {
+          display: none;
+        }
+        @media (min-width: 768px) {
+          .doctor-intro {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+          }
+        }
+      `}</style>
       <PageHeader
         title="의료진 소개"
         description="대전우리병원의 전문 의료진을 소개합니다"
@@ -212,6 +225,33 @@ export default function DoctorsPage() {
   );
 }
 
+export default function DoctorsPage() {
+  return (
+    <Suspense
+      fallback={
+        <main style={{ paddingTop: '80px', minHeight: '100vh', backgroundColor: 'var(--slate-50)' }}>
+          <PageHeader
+            title="의료진 소개"
+            description="대전우리병원의 전문 의료진을 소개합니다"
+          />
+          <div style={{ maxWidth: '80rem', margin: '0 auto', padding: '24px 20px' }}>
+            <div style={{ opacity: 0.6 }}>
+              <div style={{ height: '40px', backgroundColor: '#E5E7EB', borderRadius: '24px', width: '60%', marginBottom: '20px' }}></div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} style={{ height: '120px', backgroundColor: '#E5E7EB', borderRadius: '16px' }}></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </main>
+      }
+    >
+      <DoctorsPageContent />
+    </Suspense>
+  );
+}
+
 interface DoctorCardProps {
   doctor: Doctor;
   isExpanded: boolean;
@@ -220,6 +260,8 @@ interface DoctorCardProps {
 }
 
 function DoctorCard({ doctor, isExpanded, onToggle, onBooking }: DoctorCardProps) {
+  const [imageError, setImageError] = useState(false);
+
   return (
     <div style={{
       backgroundColor: 'white',
@@ -251,7 +293,7 @@ function DoctorCard({ doctor, isExpanded, onToggle, onBooking }: DoctorCardProps
           justifyContent: 'center',
           flexShrink: 0
         }}>
-          {doctor.profileImage ? (
+          {doctor.profileImage && !imageError ? (
             <img
               src={doctor.profileImage}
               alt={doctor.name}
@@ -260,16 +302,7 @@ function DoctorCard({ doctor, isExpanded, onToggle, onBooking }: DoctorCardProps
                 height: '100%',
                 objectFit: 'cover'
               }}
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.style.display = 'none';
-                if (target.parentElement) {
-                  const fallback = document.createElement('div');
-                  fallback.style.cssText = 'display: flex; align-items: center; justify-content: center; width: 100%; height: 100%;';
-                  fallback.innerHTML = `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--gray-400)" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>`;
-                  target.parentElement.appendChild(fallback);
-                }
-              }}
+              onError={() => setImageError(true)}
             />
           ) : (
             <User style={{ width: '40px', height: '40px', color: 'var(--gray-400)' }} />
@@ -336,15 +369,11 @@ function DoctorCard({ doctor, isExpanded, onToggle, onBooking }: DoctorCardProps
             )}
           </div>
 
-          {/* 간단 소개 */}
-          <p style={{
+          {/* 간단 소개 - 모바일에서 숨김 */}
+          <p className="doctor-intro" style={{
             fontSize: '13px',
             color: 'var(--gray-600)',
-            lineHeight: 1.5,
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden'
+            lineHeight: 1.5
           }}>
             {doctor.introduction}
           </p>
