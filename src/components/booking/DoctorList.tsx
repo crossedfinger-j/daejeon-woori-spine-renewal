@@ -65,12 +65,12 @@ export function DoctorList({
     // 관련 의료진만 필터링 (점수 0 초과) - 단, 이미 선택된 의료진은 항상 포함
     const filtered = scored.filter((item) => item.score > 0 || (selectedDoctor && item.doctor.id === selectedDoctor.id));
 
-    // 정렬 - 미리 선택된 의료진은 항상 맨 위에
+    // 정렬 - 현재 선택된 의료진은 항상 맨 위에
     filtered.sort((a, b) => {
-      // 미리 선택된 의료진은 항상 최상단
-      if (preSelectedDoctorId) {
-        if (a.doctor.id === preSelectedDoctorId) return -1;
-        if (b.doctor.id === preSelectedDoctorId) return 1;
+      // 현재 선택된 의료진은 항상 최상단
+      if (selectedDoctor) {
+        if (a.doctor.id === selectedDoctor.id) return -1;
+        if (b.doctor.id === selectedDoctor.id) return 1;
       }
 
       if (sortBy === "available") {
@@ -83,7 +83,7 @@ export function DoctorList({
     });
 
     return filtered;
-  }, [selectedSymptoms, selectedDoctor, sortBy, preSelectedDoctorId]);
+  }, [selectedSymptoms, selectedDoctor, sortBy]);
 
   if (selectedSymptoms.length === 0) {
     return (

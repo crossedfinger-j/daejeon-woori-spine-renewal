@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description:
     "대전 지역 최고의 척추·관절 전문 의료진이 환자분들의 건강한 삶을 위해 최선을 다합니다. 온라인 예약, 전문센터 안내, 의료진 소개",
   keywords: "대전우리병원, 척추, 관절, 디스크, 정형외과, 재활의학과, 통증의학과",
+  icons: {
+    icon: "/icon.svg",
+  },
   openGraph: {
     title: "대전우리병원 | 척추·관절 전문",
     description:
