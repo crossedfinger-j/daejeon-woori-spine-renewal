@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { patientFormSchema, PatientFormData } from "@/lib/validation";
 import { Input, Button } from "@/components/ui";
+import { Check } from "lucide-react";
 
 interface BookingFormProps {
   onSubmit: (data: PatientFormData) => void;
@@ -14,6 +15,8 @@ export function BookingForm({ onSubmit, isLoading }: BookingFormProps) {
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm<PatientFormData>({
     resolver: zodResolver(patientFormSchema),
@@ -25,6 +28,8 @@ export function BookingForm({ onSubmit, isLoading }: BookingFormProps) {
       privacyAgreed: false,
     },
   });
+
+  const privacyAgreed = watch("privacyAgreed");
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%', maxWidth: '100%', boxSizing: 'border-box' }}>
@@ -104,23 +109,39 @@ export function BookingForm({ onSubmit, isLoading }: BookingFormProps) {
           padding: '16px',
           backgroundColor: 'var(--gray-50)',
           borderRadius: '12px',
-          border: '1px solid var(--gray-200)',
+          border: errors.privacyAgreed ? '2px solid var(--error-500)' : '1px solid var(--gray-200)',
           width: '100%',
           maxWidth: '100%',
           boxSizing: 'border-box'
         }}
       >
-        <label style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: 'pointer' }}>
+        <div
+          onClick={() => setValue("privacyAgreed", !privacyAgreed)}
+          style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: 'pointer' }}
+        >
+          {/* 커스텀 체크박스 */}
+          <div style={{
+            width: '24px',
+            height: '24px',
+            flexShrink: 0,
+            marginTop: '2px',
+            borderRadius: '6px',
+            border: privacyAgreed ? '2px solid var(--primary-500)' : '2px solid var(--gray-300)',
+            backgroundColor: privacyAgreed ? 'var(--primary-500)' : 'white',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'all 0.2s'
+          }}>
+            {privacyAgreed && (
+              <Check style={{ width: '16px', height: '16px', color: 'white', strokeWidth: 3 }} />
+            )}
+          </div>
+          {/* 숨겨진 실제 체크박스 (폼 제출용) */}
           <input
             type="checkbox"
             {...register("privacyAgreed")}
-            style={{
-              width: '20px',
-              height: '20px',
-              marginTop: '2px',
-              accentColor: 'var(--primary-500)',
-              cursor: 'pointer'
-            }}
+            style={{ display: 'none' }}
           />
           <div style={{ flex: 1 }}>
             <span style={{ fontWeight: 600, color: 'var(--gray-900)', fontSize: '15px' }}>
@@ -131,7 +152,7 @@ export function BookingForm({ onSubmit, isLoading }: BookingFormProps) {
               정보는 진료 예약 및 안내 목적으로만 사용됩니다.
             </p>
           </div>
-        </label>
+        </div>
         {errors.privacyAgreed?.message && (
           <p style={{ marginTop: '8px', fontSize: '14px', color: 'var(--error-500)' }}>
             {errors.privacyAgreed.message}
